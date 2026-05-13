@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mad Coffee | Pre-Order & Pickup | Tallaght, Dublin</title>
+<meta name="description" content="Pre-order your coffee at Mad Coffee, Tallaght. Skip the queue — order ahead, pick up at your chosen time. Rated 4.8 ★"/>
+<!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  IMPORTANT — LOGO SETUP                                  ║
+  ║  Save your Mad Coffee logo image as  logo.png            ║
+  ║  in the same folder as this HTML file before deploying.  ║
+  ╚══════════════════════════════════════════════════════════╝
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── Variables ─────────────────────────────────────────── */
+:root{
+  --bg:#FDF8F0; --bg2:#F7EDE0; --bg3:#EFE0C8;
+  --br:#4A3728; --brd:#2C1810; --brm:#7A5A3C;
+  --or:#D97A2B; --ord:#B8631E; --orl:#E8A84C;
+  --gold:#E8B84C; --mut:#8B7265; --white:#fff;
+  --sh:0 2px 14px rgba(74,55,40,.12); --sh2:0 8px 36px rgba(74,55,40,.2);
+  --r:.75rem; --ease:cubic-bezier(.25,.46,.45,.94);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--br);line-height:1.65;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+h1,h2,h3{font-family:'Playfair Display',serif;line-height:1.18}
+h1{font-size:clamp(2.4rem,6vw,4.8rem);font-weight:700}
+h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700}
+h3{font-size:1.1rem;font-weight:600}
+p{color:var(--mut)}
+
+/* ── Layout ────────────────────────────────────────────── */
+.wrap{max-width:1120px;margin:0 auto;padding:0 1.5rem}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--or);margin-bottom:.5rem}
+.sec-title{color:var(--brd);margin-bottom:1rem}
+.bar{width:42px;height:3px;background:var(--or);border-radius:2px;margin:1.1rem 0}
+.cbar{margin-left:auto;margin-right:auto}
+.center{text-align:center}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.45rem;padding:.82rem 1.9rem;border-radius:35px;font-weight:600;font-size:.92rem;transition:all .25s;cursor:pointer}
+.btn-primary{background:var(--or);color:#fff;box-shadow:0 4px 18px rgba(217,122,43,.4)}
+.btn-primary:hover{background:var(--ord);transform:translateY(-2px)}
+.btn-outline{background:transparent;border:2px solid rgba(74,55,40,.3);color:var(--br)}
+.btn-outline:hover{border-color:var(--or);color:var(--or)}
+.btn-full{width:100%;justify-content:center;margin-top:1rem}
+.btn-sm{padding:.5rem 1.1rem;font-size:.82rem;border-radius:20px}
+
+/* ── Logo helper ────────────────────────────────────────── */
+.logo-img{height:100%;width:auto;object-fit:contain}
+.logo-wrap{display:flex;align-items:center}
+
+/* ── Floating cart ──────────────────────────────────────── */
+#fab-cart{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:700;
+  background:var(--or);color:#fff;border-radius:50px;
+  padding:.75rem 1.4rem;display:flex;align-items:center;gap:.55rem;
+  font-weight:600;font-size:.9rem;box-shadow:0 4px 20px rgba(217,122,43,.5);
+  transition:all .3s;opacity:0;transform:translateY(60px);pointer-events:none;
+}
+#fab-cart.show{opacity:1;transform:none;pointer-events:all}
+#fab-cart:hover{background:var(--ord)}
+#fab-count{
+  background:#fff;color:var(--or);border-radius:50%;
+  width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+  font-size:.72rem;font-weight:700;
+}
+
+/* ── Nav ────────────────────────────────────────────────── */
+#nav{
+  position:fixed;top:0;inset-x:0;z-index:800;
+  background:var(--brd);
+  padding:.6rem 0;
+  box-shadow:0 2px 20px rgba(0,0,0,.4);
+  transition:padding .3s;
+}
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav-logo-wrap{height:42px;flex-shrink:0}
+.nav-logo-wrap img{height:42px;width:auto;display:block}
+.nav-logo-fallback{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold);display:none}
+.nav-links{display:flex;align-items:center;gap:1.6rem}
+.nav-links a{color:rgba(255,255,255,.78);font-size:.86rem;font-weight:500;transition:color .25s}
+.nav-links a:hover{color:var(--gold)}
+.nav-order{background:var(--or);color:#fff !important;padding:.42rem 1.1rem;border-radius:22px;transition:background .25s !important}
+.nav-order:hover{background:var(--orl) !important;color:var(--brd) !important}
+.nav-cart-btn{
+  position:relative;background:rgba(255,255,255,.1);border-radius:22px;
+  padding:.42rem 1rem;color:#fff;display:flex;align-items:center;gap:.4rem;
+  font-size:.86rem;font-weight:500;transition:background .25s;flex-shrink:0;
+}
+.nav-cart-btn:hover{background:rgba(255,255,255,.2)}
+.nav-badge{
+  position:absolute;top:-.35rem;right:-.35rem;background:var(--or);color:#fff;
+  width:18px;height:18px;border-radius:50%;font-size:.64rem;font-weight:700;
+  display:none;align-items:center;justify-content:center;
+}
+.burger{display:none;flex-direction:column;gap:5px;padding:4px}
+.burger span{display:block;width:22px;height:2px;background:rgba(255,255,255,.8);border-radius:2px;transition:all .3s}
+
+/* ── Mobile menu ────────────────────────────────────────── */
+#mob{display:none;position:fixed;inset:0;z-index:790;background:var(--brd);flex-direction:column;justify-content:center;align-items:center;gap:2rem}
+#mob.open{display:flex}
+#mob a{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--white)}
+#mob .mcta{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;background:var(--or);padding:.7rem 2rem;border-radius:30px}
+.mob-x{position:absolute;top:1.5rem;right:1.5rem;color:rgba(255,255,255,.55);font-size:1.4rem}
+
+/* ── Hero ───────────────────────────────────────────────── */
+#hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;position:relative;overflow:hidden;padding-top:62px;
+}
+/* OWNER PHOTO: replace URL with your own café interior image */
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  transform:scale(1.04);transition:transform 8s ease;
+}
+#hero.go .hero-bg{transform:scale(1)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(18,7,2,.55),rgba(28,12,4,.78) 55%,rgba(18,7,2,.88))}
+.hero-inner{position:relative;z-index:2;max-width:760px;padding:2rem 1.5rem}
+.hero-logo{
+  width:min(280px,70vw);height:auto;margin:0 auto 2rem;
+  filter:drop-shadow(0 4px 20px rgba(0,0,0,.5));
+}
+.hero-logo-fallback{
+  font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,3.5rem);
+  font-weight:700;color:var(--gold);margin-bottom:2rem;display:none;
+}
+.hero h1{color:#FEFAF5;letter-spacing:-.01em;margin-bottom:.8rem}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero-sub{font-size:clamp(.95rem,2vw,1.15rem);color:rgba(254,250,245,.65);font-weight:300;margin-bottom:1.8rem;max-width:480px;margin-left:auto;margin-right:auto}
+.hero-rating{
+  display:inline-flex;align-items:center;gap:.9rem;
+  background:rgba(255,255,255,.1);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.18);border-radius:50px;
+  padding:.55rem 1.4rem;margin-bottom:2.5rem;
+}
+.r-score{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1}
+.r-stars{color:var(--gold);font-size:.88rem;letter-spacing:2px;display:block}
+.r-count{font-size:.76rem;color:rgba(254,250,245,.6)}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-hero{background:var(--or);color:#fff;padding:.9rem 2.1rem;border-radius:35px;font-weight:600;font-size:1rem;box-shadow:0 4px 22px rgba(217,122,43,.5);display:inline-flex;align-items:center;gap:.5rem;transition:all .3s}
+.btn-hero:hover{background:var(--ord);transform:translateY(-2px)}
+.btn-hero-g{background:transparent;color:#FEFAF5;border:2px solid rgba(254,250,245,.3);padding:.9rem 2.1rem;border-radius:35px;font-weight:500;font-size:1rem;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s}
+.btn-hero-g:hover{border-color:#FEFAF5;background:rgba(255,255,255,.08)}
+
+/* ── How It Works ───────────────────────────────────────── */
+#how{background:var(--brd);padding:5rem 0}
+#how .sec-title{color:#FEFAF5}
+#how .eyebrow{color:var(--gold)}
+#how p{color:rgba(196,168,130,.8)}
+#how .bar{background:var(--or)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:2.5rem}
+.step{text-align:center;padding:2rem 1.5rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:18px}
+.step-icon{font-size:2.5rem;margin-bottom:1rem}
+.step h3{color:#FEFAF5;font-size:1.05rem;margin-bottom:.5rem}
+.step-num{display:inline-block;width:28px;height:28px;background:var(--or);color:#fff;border-radius:50%;font-size:.78rem;font-weight:700;line-height:28px;margin-bottom:.75rem}
+
+/* ── Menu section ───────────────────────────────────────── */
+#menu-section{background:var(--bg);padding:5.5rem 0}
+.tab-row{display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap;margin:2rem 0}
+.tab{background:transparent;border:2px solid var(--bg3);color:var(--brm);font-size:.85rem;font-weight:600;padding:.5rem 1.3rem;border-radius:24px;transition:all .25s}
+.tab:hover,.tab.on{background:var(--brd);border-color:var(--brd);color:#fff}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.1rem}
+.mc{background:#fff;border-radius:16px;overflow:hidden;box-shadow:var(--sh);transition:transform .3s var(--ease),box-shadow .3s}
+.mc:hover{transform:translateY(-4px);box-shadow:var(--sh2)}
+.mc-thumb{aspect-ratio:4/3;overflow:hidden;position:relative}
+.mc-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.mc:hover .mc-thumb img{transform:scale(1.06)}
+.mc-thumb::after{content:'';position:absolute;bottom:0;left:0;right:0;height:35%;background:linear-gradient(to top,rgba(28,12,4,.35),transparent);pointer-events:none}
+.mc-grad{display:flex;align-items:center;justify-content:center;font-size:3rem}
+.gc{background:linear-gradient(135deg,#3B1F0E,#8B6347)}
+.gf{background:linear-gradient(135deg,#5C3A22,#C4A882)}
+.gs{background:linear-gradient(135deg,#8E3A59,#D4607A)}
+.mc-body{padding:1rem 1.1rem 1.15rem}
+.mc-body h3{font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:600;color:var(--brd);margin-bottom:.22rem}
+.mc-body p{font-size:.78rem;line-height:1.5;color:var(--mut);margin-bottom:.8rem}
+.mc-foot{display:flex;justify-content:space-between;align-items:center}
+.mc-price{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--or)}
+.btn-add{background:var(--or);color:#fff;border:none;border-radius:20px;padding:.38rem .9rem;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .25s}
+.btn-add:hover{background:var(--ord);transform:scale(1.05)}
+.btn-add:active{transform:scale(.97)}
+
+/* ── Cart sidebar ───────────────────────────────────────── */
+#cart-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;opacity:0;pointer-events:none;transition:opacity .3s}
+#cart-bg.open{opacity:1;pointer-events:all}
+#cart-sidebar{
+  position:fixed;right:0;top:0;height:100vh;width:min(400px,100vw);
+  background:#fff;z-index:1001;
+  transform:translateX(100%);transition:transform .35s var(--ease);
+  display:flex;flex-direction:column;
+}
+#cart-sidebar.open{transform:translateX(0)}
+.cart-head{display:flex;justify-content:space-between;align-items:center;padding:1.25rem 1.5rem;border-bottom:1px solid var(--bg3);background:var(--brd)}
+.cart-head h3{font-family:'Playfair Display',serif;color:#fff;font-size:1.2rem}
+.cart-close-btn{color:rgba(255,255,255,.7);font-size:1.3rem;padding:.2rem .5rem;background:transparent;border:none;cursor:pointer}
+.cart-close-btn:hover{color:#fff}
+#cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem}
+.cart-empty{text-align:center;color:var(--mut);padding:2rem 0;font-size:.95rem}
+.ci{display:flex;justify-content:space-between;align-items:center;padding:.85rem 0;border-bottom:1px solid var(--bg2)}
+.ci:last-child{border-bottom:none}
+.ci-name{font-weight:600;font-size:.9rem;color:var(--brd);margin-bottom:.15rem}
+.ci-unit{font-size:.76rem;color:var(--mut)}
+.ci-right{display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+.ci-price{font-weight:700;font-size:.95rem;color:var(--or)}
+.qty-ctrl{display:flex;align-items:center;gap:.4rem;background:var(--bg2);border-radius:20px;padding:.2rem .5rem}
+.qty-ctrl button{width:24px;height:24px;border-radius:50%;background:var(--bg3);color:var(--br);font-size:1rem;font-weight:600;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:background .2s}
+.qty-ctrl button:hover{background:var(--or);color:#fff}
+.qty-ctrl span{font-weight:600;font-size:.88rem;color:var(--brd);min-width:20px;text-align:center}
+.cart-foot{padding:1.25rem 1.5rem;border-top:1px solid var(--bg3)}
+.cart-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;font-size:1rem;font-weight:600;color:var(--brd)}
+#cart-total-amt{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--or)}
+.cart-note{font-size:.74rem;color:var(--mut);text-align:center;margin-top:.6rem}
+
+/* ── Order modal ────────────────────────────────────────── */
+#order-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1200;
+  display:none;align-items:center;justify-content:center;padding:1rem;
+}
+.modal-box{
+  background:var(--bg);border-radius:20px;width:100%;max-width:500px;
+  max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 1.75rem 1rem;border-bottom:1px solid var(--bg3)}
+.modal-head h2{font-size:1.4rem;color:var(--brd)}
+.modal-x{font-size:1.2rem;color:var(--mut);padding:.3rem;border:none;background:none;cursor:pointer}
+.modal-x:hover{color:var(--br)}
+.modal-body{padding:1.5rem 1.75rem}
+.order-summary{background:#fff;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem;border:1px solid var(--bg3)}
+.os-row{display:flex;justify-content:space-between;font-size:.87rem;padding:.3rem 0;color:var(--br)}
+.os-row:last-child{border-top:1px solid var(--bg3);margin-top:.5rem;padding-top:.75rem;font-weight:700;color:var(--brd)}
+.fg{margin-bottom:1.1rem}
+.fg label{display:block;font-size:.8rem;font-weight:600;color:var(--brm);margin-bottom:.4rem;letter-spacing:.04em}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:.72rem .95rem;border:1.5px solid var(--bg3);border-radius:10px;
+  font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--br);background:#fff;
+  transition:border-color .2s;
+}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--or)}
+.fg textarea{resize:vertical;min-height:70px}
+.fg select option:disabled{color:#999}
+.order-pay-line{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.1rem;background:rgba(217,122,43,.08);border-radius:10px;margin:.5rem 0 .25rem}
+.order-pay-line span{font-size:.88rem;color:var(--brm);font-weight:500}
+#order-pay-total{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--or)}
+.form-hint{font-size:.74rem;color:var(--mut);text-align:center;margin-top:.5rem}
+
+/* Confirmation */
+#conf-view{display:none;text-align:center;padding:2.5rem 1.75rem}
+.conf-check{font-size:3.5rem;margin-bottom:1rem}
+#conf-view h2{color:var(--brd);margin-bottom:.5rem}
+#conf-view p{margin-bottom:1.5rem}
+.code-box{
+  background:var(--brd);border-radius:16px;padding:1.5rem;margin:1.5rem 0;
+}
+.code-label{font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.code-val{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:#fff;letter-spacing:.2em}
+.code-hint{font-size:.78rem;color:rgba(196,168,130,.7);margin-top:.4rem}
+.conf-details{background:#fff;border-radius:12px;padding:1.25rem;text-align:left;margin-bottom:1.5rem}
+.cd-row{display:flex;gap:.7rem;align-items:flex-start;font-size:.87rem;color:var(--br);padding:.35rem 0;border-bottom:1px solid var(--bg2)}
+.cd-row:last-child{border-bottom:none}
+.cd-icon{flex-shrink:0;font-size:1rem}
+.cd-row strong{color:var(--brd)}
+
+/* ── Testimonials ───────────────────────────────────────── */
+#testimonials{background:var(--brd);padding:5.5rem 0}
+#testimonials .sec-title{color:#FEFAF5}
+#testimonials .eyebrow{color:var(--gold)}
+#testimonials .bar{background:var(--or)}
+.rating-big{display:flex;align-items:center;gap:1.1rem;background:rgba(254,250,245,.07);border:1px solid rgba(254,250,245,.1);padding:1.1rem 1.5rem;border-radius:14px}
+.rb-num{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:700;color:var(--gold);line-height:1}
+.rb-stars{color:var(--gold);font-size:1rem;letter-spacing:2px}
+.rb-sub p{font-size:.78rem;color:rgba(196,168,130,.65);margin-top:.15rem}
+.test-hd{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-bottom:2.5rem}
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.3rem}
+.tc{background:rgba(254,250,245,.06);border:1px solid rgba(254,250,245,.08);border-radius:16px;padding:1.6rem;transition:transform .3s,background .3s}
+.tc:hover{transform:translateY(-4px);background:rgba(254,250,245,.1)}
+.tc-stars{color:var(--gold);font-size:.82rem;letter-spacing:2px;margin-bottom:.9rem}
+.tc-q{font-size:.92rem;color:rgba(196,168,130,.85);line-height:1.72;font-style:italic;margin-bottom:1.2rem}
+.tc-author{display:flex;align-items:center;gap:.65rem}
+.tc-av{width:38px;min-width:38px;height:38px;border-radius:50%;background:var(--brm);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff}
+.tc-name{font-size:.86rem;font-weight:600;color:#FEFAF5}
+.tc-date{font-size:.72rem;color:rgba(196,168,130,.5)}
+
+/* ── Location ───────────────────────────────────────────── */
+#location{background:var(--bg2);padding:5.5rem 0}
+.loc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.map-wrap{border-radius:18px;overflow:hidden;box-shadow:var(--sh2);height:400px}
+.map-wrap iframe{width:100%;height:100%;border:none;display:block}
+.mlink{display:inline-flex;align-items:center;gap:.4rem;margin-top:.8rem;color:var(--or);font-size:.85rem;font-weight:600}
+.mlink:hover{color:var(--brd)}
+.opill{display:inline-flex;align-items:center;gap:.45rem;padding:.28rem .9rem;border-radius:12px;font-size:.74rem;font-weight:700;margin-bottom:1.2rem}
+.opill .dot{width:7px;height:7px;border-radius:50%;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hbox{background:#fff;border-radius:14px;padding:1.5rem;margin-bottom:1.1rem;box-shadow:var(--sh)}
+.hbox h3{font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;color:var(--brd);margin-bottom:1rem}
+.hr{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--bg3);font-size:.85rem}
+.hr:last-child{border-bottom:none}
+.hday{color:var(--brm);font-weight:500}
+.htime{color:var(--or);font-weight:600}
+.hr.today{background:rgba(217,122,43,.07);margin:0 -.5rem;padding:.5rem .5rem;border-radius:8px;border-bottom:none}
+.ibox{background:var(--brd);border-radius:14px;padding:1.5rem;color:#fff}
+.ibox h3{font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:600;color:var(--gold);margin-bottom:.9rem}
+.irow{display:flex;align-items:flex-start;gap:.65rem;font-size:.85rem;color:rgba(196,168,130,.85);margin-bottom:.7rem}
+.irow svg{color:var(--or);flex-shrink:0;margin-top:2px}
+.irow a{color:var(--orl)}
+.itags{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.9rem}
+.itag{background:rgba(217,122,43,.2);border:1px solid rgba(217,122,43,.3);color:var(--orl);font-size:.72rem;font-weight:600;padding:.24rem .7rem;border-radius:9px}
+
+/* ── Footer ─────────────────────────────────────────────── */
+#footer{background:var(--brd);color:#FEFAF5;text-align:center;padding:3rem 1.5rem}
+.f-logo-wrap{height:58px;display:flex;justify-content:center;margin-bottom:.5rem}
+.f-logo-wrap img{height:58px;width:auto}
+.f-tag{font-style:italic;font-size:.9rem;color:rgba(196,168,130,.55);margin-bottom:1.3rem}
+.f-links{display:flex;justify-content:center;gap:1.3rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.f-links a{color:rgba(196,168,130,.55);font-size:.82rem;font-weight:500;transition:color .25s}
+.f-links a:hover{color:var(--gold)}
+.f-socrow{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.f-soc{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;padding:.45rem 1rem;border-radius:20px;transition:all .25s}
+.f-ig{background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);color:#fff}
+.f-ig:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(131,58,180,.4)}
+.f-tk{background:#000;color:#fff}
+.f-tk:hover{background:#111;transform:translateY(-2px)}
+.f-copy{font-size:.74rem;color:rgba(196,168,130,.3);margin-top:.3rem}
+.f-admin{font-size:.7rem;color:rgba(196,168,130,.2);margin-top:1.5rem;cursor:pointer;transition:color .25s}
+.f-admin:hover{color:rgba(196,168,130,.5)}
+
+/* ── Admin overlay ──────────────────────────────────────── */
+#admin-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:#150800;flex-direction:column;overflow-y:auto;
+}
+.admin-topbar{background:rgba(0,0,0,.4);padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(217,122,43,.25);position:sticky;top:0}
+.admin-topbar-logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold)}
+.admin-close-btn{color:rgba(255,255,255,.5);font-size:1rem;border:1px solid rgba(255,255,255,.2);padding:.35rem .8rem;border-radius:8px;background:none;cursor:pointer}
+.admin-close-btn:hover{color:#fff;border-color:#fff}
+#admin-login-view{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100vh - 60px);padding:2rem;
+}
+.login-box{background:rgba(255,255,255,.05);border:1px solid rgba(217,122,43,.25);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;text-align:center}
+.login-box h2{color:#FEFAF5;margin-bottom:.5rem}
+.login-box p{color:rgba(196,168,130,.7);font-size:.87rem;margin-bottom:2rem}
+.admin-input{width:100%;padding:.8rem 1rem;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-family:'DM Sans',sans-serif;font-size:1rem;margin-bottom:1rem;text-align:center;letter-spacing:.1em}
+.admin-input:focus{outline:none;border-color:var(--or)}
+.admin-input::placeholder{color:rgba(255,255,255,.3);letter-spacing:0}
+.pw-err{color:#ff6b6b;font-size:.8rem;margin-bottom:.75rem;display:none}
+.btn-admin-login{width:100%;padding:.82rem;background:var(--or);color:#fff;border-radius:10px;font-weight:600;font-size:.95rem;border:none;cursor:pointer;transition:background .25s}
+.btn-admin-login:hover{background:var(--ord)}
+#admin-panel-view{display:none;padding:1.5rem}
+.admin-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.astat{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.1rem;text-align:center}
+.astat-val{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--gold)}
+.astat-lbl{font-size:.74rem;color:rgba(196,168,130,.6);margin-top:.2rem}
+#new-order-alert{
+  display:none;position:sticky;top:70px;z-index:10;
+  background:var(--or);color:#fff;padding:.8rem 1.2rem;border-radius:12px;
+  align-items:center;gap:.75rem;font-weight:600;font-size:.9rem;margin-bottom:1.5rem;
+  animation:flash .5s ease-in-out 3;
+}
+@keyframes flash{0%,100%{opacity:1}50%{opacity:.6}}
+#admin-orders-list{display:flex;flex-direction:column;gap:1rem}
+.ao{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:1.25rem;transition:border-color .3s;
+}
+.ao.new-order{border-color:var(--or);animation:pulse-border 1s ease-in-out 3}
+@keyframes pulse-border{0%,100%{border-color:rgba(217,122,43,.3)}50%{border-color:var(--or)}}
+.ao.done{opacity:.55}
+.ao-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem}
+.ao-code{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold)}
+.ao-slot{font-size:.82rem;color:rgba(196,168,130,.7)}
+.ao-slot strong{color:var(--orl)}
+.ao-status{font-size:.72rem;font-weight:700;padding:.22rem .65rem;border-radius:8px}
+.st-pending{background:rgba(232,184,76,.15);color:var(--gold)}
+.st-done{background:rgba(34,139,34,.15);color:#5dba5d}
+.ao-customer{font-size:.88rem;color:rgba(196,168,130,.85);margin-bottom:.4rem}
+.ao-items{font-size:.84rem;color:rgba(255,255,255,.7);margin-bottom:.35rem}
+.ao-total{font-size:.84rem;color:rgba(196,168,130,.65)}
+.ao-total strong{color:var(--orl)}
+.ao-ready{font-size:.82rem;color:#5dba5d;margin-top:.3rem;font-weight:600}
+.ao-notes{font-size:.8rem;color:rgba(196,168,130,.6);font-style:italic;margin-top:.25rem}
+.ao-btns{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+.ao-btn{padding:.45rem 1rem;border-radius:20px;font-size:.78rem;font-weight:600;border:none;cursor:pointer;transition:all .25s;color:#fff}
+.ao-btn-15{background:#2980b9}.ao-btn-15:hover{background:#1f6897}
+.ao-btn-20{background:#27ae60}.ao-btn-20:hover{background:#1e8449}
+.ao-btn-30{background:#8e44ad}.ao-btn-30:hover{background:#703688}
+.ao-btn-cancel{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}.ao-btn-cancel:hover{background:rgba(220,50,50,.2);color:#ff8080}
+.admin-empty{text-align:center;color:rgba(196,168,130,.5);padding:3rem 0;font-size:.95rem}
+.admin-refresh-btn{background:rgba(255,255,255,.08);color:rgba(196,168,130,.8);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.4rem .9rem;font-size:.8rem;cursor:pointer;transition:all .25s;margin-left:.75rem}
+.admin-refresh-btn:hover{background:rgba(255,255,255,.14);color:#fff}
+.admin-filter-row{display:flex;align-items:center;gap:.6rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.admin-filter-row span{color:rgba(196,168,130,.6);font-size:.8rem}
+.af-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(196,168,130,.7);border-radius:16px;padding:.3rem .8rem;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s}
+.af-btn.on{background:var(--or);border-color:var(--or);color:#fff}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media(max-width:900px){.loc-grid{grid-template-columns:1fr;gap:2rem}.steps{grid-template-columns:1fr;gap:1rem}.test-hd{flex-direction:column;align-items:flex-start}}
+@media(max-width:768px){.nav-links{display:none}.burger{display:flex}#hero,#how,#menu-section,#testimonials,#location{padding-top:3.5rem;padding-bottom:3.5rem}.menu-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+@media(max-width:520px){.menu-grid{grid-template-columns:1fr 1fr}.hero-btns{flex-direction:column;align-items:center}.steps{gap:1rem}.modal-box{border-radius:16px 16px 0 0;max-height:95vh}#order-modal{align-items:flex-end;padding:0}.ao-btns{gap:.4rem}.ao-btn{font-size:.72rem;padding:.38rem .8rem}}
+@media(max-width:380px){.menu-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ── Floating cart pill ─────────────────────────────────── -->
+<div id="fab-cart" onclick="openCart()">
+  🛒 <span>Cart</span>
+  <span id="fab-count">0</span>
+</div>
+
+<!-- ── Nav ──────────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="wrap nav-row">
+    <a href="#hero" class="nav-logo-wrap">
+      <img src="logo.png" alt="Mad Coffee" class="logo-img"
+           onerror="this.style.display='none';document.querySelector('.nav-logo-fallback').style.display='block'"/>
+      <span class="nav-logo-fallback">Mad Coffee</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#menu-section">Menu</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#location">Find Us</a></li>
+      <li><a href="#menu-section" class="nav-order">Pre-Order</a></li>
+    </ul>
+    <button class="nav-cart-btn" onclick="openCart()" aria-label="Cart">
+      🛒 <span id="nav-cart-label">Cart</span>
+      <span class="nav-badge" id="nav-badge">0</span>
+    </button>
+    <button class="burger" onclick="mobToggle()" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mob">
+  <button class="mob-x" onclick="mobToggle()">✕</button>
+  <a href="#how"          onclick="mobToggle()">How It Works</a>
+  <a href="#menu-section" onclick="mobToggle()">Menu</a>
+  <a href="#testimonials" onclick="mobToggle()">Reviews</a>
+  <a href="#location"     onclick="mobToggle()">Find Us</a>
+  <a href="#menu-section" onclick="mobToggle()" class="mcta">Pre-Order Now</a>
+</div>
+
+<!-- ── Hero ─────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-inner">
+    <!-- 📸 This displays your logo.png file. Save the logo image as logo.png in this folder. -->
+    <img src="logo.png" alt="Mad Coffee" class="hero-logo"
+         onerror="this.style.display='none';document.querySelector('.hero-logo-fallback').style.display='block'"/>
+    <div class="hero-logo-fallback">Mad Coffee</div>
+    <h1>Start Your Day<br>with a <em>Smile!</em></h1>
+    <p class="hero-sub">Order ahead, skip the queue, and collect your perfect coffee exactly when you want it.</p>
+    <div class="hero-rating">
+      <div class="r-score">4.8</div>
+      <div>
+        <span class="r-stars">★★★★★</span>
+        <div class="r-count">121 Google reviews</div>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#menu-section" class="btn-hero">☕ Pre-Order Now</a>
+      <a href="#how" class="btn-hero-g">How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── How It Works ──────────────────────────────────────── -->
+<section id="how">
+  <div class="wrap">
+    <div class="center rv">
+      <p class="eyebrow">Skip the Queue</p>
+      <h2 class="sec-title">How Pre-Order Works</h2>
+      <div class="bar cbar"></div>
+      <p>Three simple steps — your coffee is ready the moment you walk in.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv d1">
+        <div class="step-num">1</div>
+        <div class="step-icon">☕</div>
+        <h3>Browse & Add</h3>
+        <p>Choose your coffee, food and drinks from our menu and add to your cart.</p>
+      </div>
+      <div class="step rv d2">
+        <div class="step-num">2</div>
+        <div class="step-icon">🕐</div>
+        <h3>Pick a Time</h3>
+        <p>Select a 15-minute pickup slot. We only accept 3 orders per slot — so yours is guaranteed ready on time.</p>
+      </div>
+      <div class="step rv d3">
+        <div class="step-num">3</div>
+        <div class="step-icon">🎉</div>
+        <h3>Collect & Enjoy</h3>
+        <p>Walk in, show your 6-character order code, and your order is waiting. Pay at the counter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Menu ─────────────────────────────────────────────── -->
+<section id="menu-section">
+  <div class="wrap">
+    <div class="center rv">
+      <p class="eyebrow">Fresh Every Day</p>
+      <h2 class="sec-title">Our Menu</h2>
+      <div class="bar cbar"></div>
+      <p>Simple, quality ingredients — made with care every morning.</p>
+    </div>
+    <div class="tab-row rv d1">
+      <button class="tab on" onclick="filterMenu('all',this)">All</button>
+      <button class="tab" onclick="filterMenu('coffee',this)">☕ Coffee</button>
+      <button class="tab" onclick="filterMenu('food',this)">🥪 Food</button>
+      <button class="tab" onclick="filterMenu('drinks',this)">🥤 Drinks</button>
+    </div>
+    <div class="menu-grid" id="menu-grid"></div>
+  </div>
+</section>
+
+<!-- ── Cart sidebar ──────────────────────────────────────── -->
+<div id="cart-bg" onclick="closeCart()"></div>
+<div id="cart-sidebar">
+  <div class="cart-head">
+    <h3>🛒 Your Order</h3>
+    <button class="cart-close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div id="cart-items"></div>
+  <div class="cart-foot">
+    <div class="cart-total">
+      <span>Total to Pay at Pickup</span>
+      <span id="cart-total-amt">€0.00</span>
+    </div>
+    <button id="cart-checkout-btn" class="btn btn-primary btn-full" onclick="openOrderModal()" disabled>
+      Choose Pickup Time →
+    </button>
+    <p class="cart-note">Pay cash or card when you collect. No online payment needed.</p>
+  </div>
+</div>
+
+<!-- ── Order modal ───────────────────────────────────────── -->
+<div id="order-modal">
+  <div class="modal-box">
+    <!-- Form view -->
+    <div id="form-view">
+      <div class="modal-head">
+        <h2>Complete Your Order</h2>
+        <button class="modal-x" onclick="closeOrderModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="order-summary" id="order-summary"></div>
+        <form id="order-form" onsubmit="submitOrder(event)" novalidate>
+          <div class="fg">
+            <label>Your Name *</label>
+            <input id="f-name" type="text" required placeholder="e.g. Sarah" autocomplete="given-name"/>
+          </div>
+          <div class="fg">
+            <label>Phone Number *</label>
+            <input id="f-phone" type="tel" required placeholder="e.g. 086 123 4567" autocomplete="tel"/>
+          </div>
+          <div class="fg">
+            <label>Pickup Time *</label>
+            <select id="f-slot" required>
+              <option value="">Select a time slot...</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Special Requests (optional)</label>
+            <textarea id="f-notes" rows="2" placeholder="e.g. Oat milk, extra hot, no sugar…"></textarea>
+          </div>
+          <div class="order-pay-line">
+            <span>Total to Pay at Pickup:</span>
+            <span id="order-pay-total">€0.00</span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Place Order →</button>
+          <p class="form-hint">You'll receive a code to show when collecting. Pay at the counter.</p>
+        </form>
+      </div>
+    </div>
+    <!-- Confirmation view -->
+    <div id="conf-view">
+      <div class="conf-check">✅</div>
+      <h2>Order Confirmed!</h2>
+      <p>Hi <strong id="c-name"></strong> — your order is placed and will be ready at <strong id="c-time"></strong>!</p>
+      <div class="code-box">
+        <div class="code-label">Your Order Code</div>
+        <div class="code-val" id="c-code"></div>
+        <div class="code-hint">Show this code when you arrive to collect</div>
+      </div>
+      <div class="conf-details" id="c-details"></div>
+      <button class="btn btn-primary btn-full" onclick="closeOrderModal()">Back to Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Testimonials ──────────────────────────────────────── -->
+<section id="testimonials">
+  <div class="wrap">
+    <div class="test-hd rv">
+      <div>
+        <p class="eyebrow">What Customers Say</p>
+        <h2 class="sec-title">Loved by Locals</h2>
+        <div class="bar"></div>
+      </div>
+      <div class="rating-big">
+        <div class="rb-num">4.8</div>
+        <div class="rb-sub">
+          <div class="rb-stars">★★★★★</div>
+          <p>121 Google reviews</p>
+          <p>Tallaght, Dublin</p>
+        </div>
+      </div>
+    </div>
+    <div class="tg">
+      <div class="tc rv">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-q">"Genuinely one of the best coffee spots in South Dublin. The cappuccino is perfectly made every time — not too strong, not too milky. A real hidden gem in Tallaght!"</p>
+        <div class="tc-author"><div class="tc-av">FE</div><div><div class="tc-name">F.E.</div><div class="tc-date">Google Review · 2025</div></div></div>
+      </div>
+      <div class="tc rv d1">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-q">"Great coffee, friendly staff and really good vibes. I come here every morning before work and it always sets me up perfectly for the day. Highly recommend!"</p>
+        <div class="tc-author"><div class="tc-av">M</div><div><div class="tc-name">Mateo</div><div class="tc-date">Google Review · 2025</div></div></div>
+      </div>
+      <div class="tc rv d2">
+        <div class="tc-stars">★★★★★</div>
+        <p class="tc-q">"Such a lovely little café. The staff are so welcoming and the coffee is always spot on. Love my morning visits — it's become part of my daily routine!"</p>
+        <div class="tc-author"><div class="tc-av">AG</div><div><div class="tc-name">Ann Geraghty</div><div class="tc-date">Google Review · 2025</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Location & Hours ──────────────────────────────────── -->
+<section id="location">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:2.5rem">
+      <p class="eyebrow">Come Visit Us</p>
+      <h2 class="sec-title">Find Mad Coffee</h2>
+      <div class="bar"></div>
+    </div>
+    <div class="loc-grid">
+      <div class="rv">
+        <div class="map-wrap">
+          <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=-6.3860%2C53.2785%2C-6.3620%2C53.2905&layer=mapnik&marker=53.2845%2C-6.3740"
+            allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="Mad Coffee, Tallaght"></iframe>
+        </div>
+        <a href="https://maps.google.com/?q=255+Old+Blessington+Rd+Tallaght+Dublin+D24+ETE5"
+           target="_blank" rel="noopener" class="mlink">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open in Google Maps
+        </a>
+      </div>
+      <div class="rv d1">
+        <div class="opill" id="opill"><span class="dot" id="odot"></span><span id="otxt">…</span></div>
+        <div class="hbox">
+          <h3>🕐 Opening Hours</h3>
+          <div class="hr" id="hr-1"><span class="hday">Monday</span>    <span class="htime">7:30am – 3:30pm</span></div>
+          <div class="hr" id="hr-2"><span class="hday">Tuesday</span>   <span class="htime">7:30am – 3:30pm</span></div>
+          <div class="hr" id="hr-3"><span class="hday">Wednesday</span> <span class="htime">7:30am – 3:30pm</span></div>
+          <div class="hr" id="hr-4"><span class="hday">Thursday</span>  <span class="htime">7:30am – 3:30pm</span></div>
+          <div class="hr" id="hr-5"><span class="hday">Friday</span>    <span class="htime">7:30am – 3:30pm</span></div>
+          <div class="hr" id="hr-6"><span class="hday">Saturday</span>  <span class="htime">9:00am – 3:00pm</span></div>
+          <div class="hr" id="hr-0"><span class="hday">Sunday</span>    <span class="htime">9:00am – 3:00pm</span></div>
+        </div>
+        <div class="ibox">
+          <h3>📍 Address &amp; Socials</h3>
+          <div class="irow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>255 24, Old Blessington Rd, Tallaght, Dublin, D24 ETE5</div>
+          <div class="irow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg><a href="https://www.instagram.com/madcoffee__/" target="_blank" rel="noopener">@madcoffee__</a> on Instagram</div>
+          <div class="irow"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color:var(--orl)"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.92a8.18 8.18 0 0 0 4.77 1.52V7.01a4.85 4.85 0 0 1-1-.32z"/></svg><a href="https://www.tiktok.com/@madcoffee_tallaght" target="_blank" rel="noopener">@madcoffee_tallaght</a> on TikTok</div>
+          <div class="itags"><span class="itag">🍽️ Dine-in</span><span class="itag">🥡 Takeaway</span><span class="itag">🛵 Delivery</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────── -->
+<footer id="footer">
+  <div class="f-logo-wrap">
+    <img src="logo.png" alt="Mad Coffee" class="logo-img"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <span style="display:none;font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--gold)">Mad Coffee</span>
+  </div>
+  <p class="f-tag">"Start your day with a Smile!" · Est. 2021</p>
+  <nav class="f-links">
+    <a href="#how">How It Works</a>
+    <a href="#menu-section">Menu</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#location">Find Us</a>
+  </nav>
+  <div class="f-socrow">
+    <a href="https://www.instagram.com/madcoffee__/" target="_blank" rel="noopener" class="f-soc f-ig">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      @madcoffee__
+    </a>
+    <a href="https://www.tiktok.com/@madcoffee_tallaght" target="_blank" rel="noopener" class="f-soc f-tk">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.92a8.18 8.18 0 0 0 4.77 1.52V7.01a4.85 4.85 0 0 1-1-.32z"/></svg>
+      @madcoffee_tallaght
+    </a>
+  </div>
+  <p class="f-copy">255 24, Old Blessington Rd, Tallaght, Dublin, D24 ETE5</p>
+  <p class="f-copy">© 2025 Mad Coffee. All rights reserved.</p>
+  <p class="f-admin" onclick="openAdmin()">Staff Login</p>
+</footer>
+
+<!-- ── Admin overlay ─────────────────────────────────────── -->
+<div id="admin-overlay">
+  <div class="admin-topbar">
+    <span class="admin-topbar-logo">☕ Mad Coffee — Staff Panel</span>
+    <button class="admin-close-btn" onclick="closeAdmin()">✕ Exit</button>
+  </div>
+
+  <!-- Login -->
+  <div id="admin-login-view">
+    <div class="login-box">
+      <div style="font-size:2.5rem;margin-bottom:1rem">🔐</div>
+      <h2>Staff Login</h2>
+      <p>Enter the staff password to view and manage orders</p>
+      <p class="pw-err" id="pw-err">Incorrect password. Try again.</p>
+      <input id="admin-pw" class="admin-input" type="password" placeholder="Password"
+             onkeydown="if(event.key==='Enter')adminLogin()"/>
+      <button class="btn-admin-login" onclick="adminLogin()">Login →</button>
+    </div>
+  </div>
+
+  <!-- Panel -->
+  <div id="admin-panel-view">
+    <div id="new-order-alert">🔔 New order received!</div>
+    <div class="admin-stats" id="admin-stats"></div>
+
+    <div class="admin-filter-row">
+      <span>Show:</span>
+      <button class="af-btn on" onclick="adminFilter('all',this)">All</button>
+      <button class="af-btn" onclick="adminFilter('pending',this)">⏳ Pending</button>
+      <button class="af-btn" onclick="adminFilter('done',this)">✅ Done</button>
+      <button class="admin-refresh-btn" onclick="loadAdminOrders()">↻ Refresh</button>
+    </div>
+
+    <div id="admin-orders-list"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════ */
+const MENU = [
+  {id:1, name:'Cappuccino',           price:3.50, cat:'coffee', img:'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80', desc:'Rich espresso with steamed milk & velvety foam'},
+  {id:2, name:'Latte',                price:3.50, cat:'coffee', img:'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=400&q=80', desc:'Smooth espresso with generous silky steamed milk'},
+  {id:3, name:'Espresso',             price:2.50, cat:'coffee', img:'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?auto=format&fit=crop&w=400&q=80', desc:'A bold, concentrated shot of pure coffee'},
+  {id:4, name:'Americano',            price:3.00, cat:'coffee', img:'', emoji:'☕', desc:'Espresso with hot water — rich and full-bodied'},
+  {id:5, name:'Flat White',           price:3.50, cat:'coffee', img:'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=400&q=80', desc:'Intense espresso with micro-foamed velvety milk'},
+  {id:6, name:'Iced Latte',           price:4.00, cat:'coffee', img:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=400&q=80', desc:'Cold espresso over ice with chilled milk'},
+  {id:7, name:'Cheese Toastie',       price:4.50, cat:'food',   img:'', emoji:'🧀', desc:'Golden-toasted sourdough with melted cheddar'},
+  {id:8, name:'Ham & Cheese Toastie', price:5.00, cat:'food',   img:'', emoji:'🥪', desc:'Smoked ham & melted cheddar on toasted bread'},
+  {id:9, name:'Chicken & Pesto Toastie', price:6.50, cat:'food', img:'', emoji:'🐓', desc:'Tender chicken, basil pesto & mozzarella'},
+  {id:10,name:'Overnight Oats',       price:5.00, cat:'food',   img:'https://images.unsplash.com/photo-1517673132405-a56a62b18caf?auto=format&fit=crop&w=400&q=80', desc:'Rolled oats, chia seeds, seasonal fruit & honey'},
+  {id:11,name:'Berry Smoothie',       price:5.50, cat:'drinks', img:'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=400&q=80', desc:'Blueberry, strawberry, banana & oat milk'},
+  {id:12,name:'Mango Smoothie',       price:5.50, cat:'drinks', img:'', emoji:'🥭', desc:'Mango, pineapple, banana & coconut milk'},
+];
+
+const ADMIN_PW    = 'madcoffee123';
+const STORE_KEY   = 'mc_orders';
+const MAX_PER_SLOT = 3;
+
+let cart = [];
+let adminFilterMode = 'all';
+let adminPollTimer  = null;
+let adminLastCount  = 0;
+
+/* ═══════════════════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════════════════ */
+const $ = id => document.getElementById(id);
+
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function getOrders() { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+function saveOrders(o) { localStorage.setItem(STORE_KEY, JSON.stringify(o)); }
+
+function fmt12(h, m) {
+  const ap = h < 12 ? 'AM' : 'PM';
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${h12}:${String(m).padStart(2,'0')} ${ap}`;
+}
+
+function slotToFmt(slot) { // "07:30" → "7:30 AM"
+  const [h, m] = slot.split(':').map(Number);
+  return fmt12(h, m);
+}
+
+function genCode() {
+  return Array.from({length:6}, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MENU RENDER
+═══════════════════════════════════════════════════════════ */
+function filterMenu(cat, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  renderMenu(cat);
+}
+
+function renderMenu(cat = 'all') {
+  const items = cat === 'all' ? MENU : MENU.filter(m => m.cat === cat);
+  const gradMap = {coffee:'gc', food:'gf', drinks:'gs'};
+  $('menu-grid').innerHTML = items.map(item => `
+    <div class="mc">
+      <div class="mc-thumb ${item.img ? '' : `mc-grad ${gradMap[item.cat]}`}">
+        ${item.img
+          ? `<img src="${item.img}" alt="${item.name}" loading="lazy"/>`
+          : `<span style="font-size:2.8rem">${item.emoji||'☕'}</span>`}
+      </div>
+      <div class="mc-body">
+        <h3>${item.name}</h3>
+        <p>${item.desc}</p>
+        <div class="mc-foot">
+          <span class="mc-price">€${item.price.toFixed(2)}</span>
+          <button class="btn-add" onclick="addToCart(${item.id})">+ Add</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CART
+═══════════════════════════════════════════════════════════ */
+function addToCart(id) {
+  const item = MENU.find(m => m.id === id);
+  const ex   = cart.find(c => c.id === id);
+  if (ex) ex.qty++;
+  else cart.push({...item, qty:1});
+  renderCart();
+  openCart();
+  syncBadges();
+  showFab();
+}
+
+function updateQty(id, delta) {
+  const item = cart.find(c => c.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(c => c.id !== id);
+  renderCart();
+  syncBadges();
+  if (cart.length === 0) { showFab(false); }
+}
+
+function cartTotal() { return cart.reduce((s, c) => s + c.price * c.qty, 0); }
+function cartCount() { return cart.reduce((s, c) => s + c.qty, 0); }
+
+function renderCart() {
+  const el = $('cart-items');
+  if (!cart.length) {
+    el.innerHTML = '<p class="cart-empty">Your cart is empty.<br>Add items from the menu!</p>';
+    $('cart-checkout-btn').disabled = true;
+    $('cart-total-amt').textContent = '€0.00';
+    return;
+  }
+  el.innerHTML = cart.map(c => `
+    <div class="ci">
+      <div>
+        <div class="ci-name">${c.name}</div>
+        <div class="ci-unit">€${c.price.toFixed(2)} each</div>
+      </div>
+      <div class="ci-right">
+        <div class="qty-ctrl">
+          <button onclick="updateQty(${c.id},-1)">−</button>
+          <span>${c.qty}</span>
+          <button onclick="updateQty(${c.id},1)">+</button>
+        </div>
+        <span class="ci-price">€${(c.price*c.qty).toFixed(2)}</span>
+      </div>
+    </div>`).join('');
+  $('cart-total-amt').textContent = `€${cartTotal().toFixed(2)}`;
+  $('cart-checkout-btn').disabled = false;
+}
+
+function syncBadges() {
+  const n = cartCount();
+  $('nav-badge').textContent = n;
+  $('nav-badge').style.display = n > 0 ? 'flex' : 'none';
+  $('fab-count').textContent = n;
+}
+
+function showFab(show = true) {
+  $('fab-cart').classList.toggle('show', show && cart.length > 0);
+}
+
+function openCart()  { $('cart-sidebar').classList.add('open'); $('cart-bg').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart() { $('cart-sidebar').classList.remove('open'); $('cart-bg').classList.remove('open'); document.body.style.overflow=''; }
+
+/* ═══════════════════════════════════════════════════════════
+   TIME SLOTS
+═══════════════════════════════════════════════════════════ */
+function generateSlots() {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun
+  const wknd = day === 0 || day === 6;
+  const [sH, sM] = wknd ? [9, 0]  : [7, 30];
+  const [eH, eM] = wknd ? [14,45] : [15,15]; // last slot
+  const today = todayStr();
+  const slots  = [];
+  let h = sH, m = sM;
+  while (h < eH || (h === eH && m <= eM)) {
+    const ts  = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    const slotDate = new Date(now); slotDate.setHours(h, m, 0, 0);
+    const cutoff   = new Date(now.getTime() + 15 * 60 * 1000);
+    if (slotDate >= cutoff) {
+      const count = getOrders().filter(o => o.date === today && o.slot === ts && o.status !== 'cancelled').length;
+      slots.push({ time: ts, label: fmt12(h, m), count, full: count >= MAX_PER_SLOT });
+    }
+    m += 15; if (m >= 60) { m -= 60; h++; }
+  }
+  return slots;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ORDER MODAL
+═══════════════════════════════════════════════════════════ */
+function openOrderModal() {
+  if (!cart.length) return;
+  closeCart();
+
+  // Summary
+  const sumEl = $('order-summary');
+  sumEl.innerHTML = cart.map(c => `
+    <div class="os-row"><span>${c.qty}× ${c.name}</span><span>€${(c.price*c.qty).toFixed(2)}</span></div>`).join('') +
+    `<div class="os-row"><span>Total</span><span>€${cartTotal().toFixed(2)}</span></div>`;
+
+  $('order-pay-total').textContent = `€${cartTotal().toFixed(2)}`;
+
+  // Slots
+  const slots  = generateSlots();
+  const select = $('f-slot');
+  select.innerHTML = '<option value="">Choose a pickup time…</option>';
+  if (slots.length === 0) {
+    select.innerHTML = '<option value="" disabled>No slots available today — please visit us directly</option>';
+  } else {
+    slots.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value   = s.time;
+      opt.textContent = s.full ? `${s.label} — Full (${MAX_PER_SLOT}/${MAX_PER_SLOT})` : `${s.label}`;
+      if (s.full) opt.disabled = true;
+      select.appendChild(opt);
+    });
+  }
+
+  // Reset
+  $('order-form').reset();
+  $('form-view').style.display  = 'block';
+  $('conf-view').style.display  = 'none';
+  $('order-modal').style.display = 'flex';
+  document.body.style.overflow   = 'hidden';
+}
+
+function closeOrderModal() {
+  $('order-modal').style.display = 'none';
+  document.body.style.overflow   = '';
+}
+
+function submitOrder(e) {
+  e.preventDefault();
+  const name  = $('f-name').value.trim();
+  const phone = $('f-phone').value.trim();
+  const slot  = $('f-slot').value;
+  const notes = $('f-notes').value.trim();
+  if (!name || !phone || !slot) { alert('Please fill in your name, phone number, and pickup time.'); return; }
+
+  const code  = genCode();
+  const order = {
+    id: code, name, phone, slot, notes,
+    items: cart.map(c => ({name:c.name, price:c.price, qty:c.qty})),
+    total: cartTotal(),
+    date:  todayStr(),
+    ts:    Date.now(),
+    status:'pending',
+    readyAt: null
+  };
+
+  const orders = getOrders();
+  orders.push(order);
+  saveOrders(orders);
+
+  // Show confirmation
+  $('c-name').textContent = name;
+  $('c-time').textContent = slotToFmt(slot);
+  $('c-code').textContent = code;
+  $('c-details').innerHTML = `
+    <div class="cd-row"><span class="cd-icon">📍</span><div>255 24, Old Blessington Rd, Tallaght, Dublin</div></div>
+    <div class="cd-row"><span class="cd-icon">⏰</span><div>Pickup at approximately <strong>${slotToFmt(slot)}</strong></div></div>
+    <div class="cd-row"><span class="cd-icon">🛒</span><div>${order.items.map(i=>`${i.qty}× ${i.name}`).join(', ')}</div></div>
+    <div class="cd-row"><span class="cd-icon">💶</span><div>Pay at counter: <strong>€${order.total.toFixed(2)}</strong></div></div>
+    ${notes ? `<div class="cd-row"><span class="cd-icon">📝</span><div>${notes}</div></div>` : ''}`;
+
+  $('form-view').style.display = 'none';
+  $('conf-view').style.display = 'block';
+
+  cart = [];
+  renderCart();
+  syncBadges();
+  showFab(false);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN
+═══════════════════════════════════════════════════════════ */
+function openAdmin() {
+  $('admin-overlay').style.display = 'flex';
+  $('admin-login-view').style.display  = 'flex';
+  $('admin-panel-view').style.display  = 'none';
+  $('admin-pw').value = '';
+  $('pw-err').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => $('admin-pw').focus(), 200);
+}
+
+function closeAdmin() {
+  $('admin-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  if (adminPollTimer) { clearInterval(adminPollTimer); adminPollTimer = null; }
+}
+
+function adminLogin() {
+  if ($('admin-pw').value === ADMIN_PW) {
+    $('admin-login-view').style.display = 'none';
+    $('admin-panel-view').style.display = 'block';
+    loadAdminOrders();
+    startPoll();
+  } else {
+    $('pw-err').style.display = 'block';
+    $('admin-pw').value = '';
+    $('admin-pw').focus();
+  }
+}
+
+function adminFilter(mode, btn) {
+  adminFilterMode = mode;
+  document.querySelectorAll('.af-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  loadAdminOrders();
+}
+
+function loadAdminOrders() {
+  const today  = todayStr();
+  let orders   = getOrders().filter(o => o.date === today).sort((a,b) => b.ts - a.ts);
+  const total  = orders.length;
+  const pending = orders.filter(o => o.status === 'pending').length;
+  const done   = orders.filter(o => o.status !== 'pending' && o.status !== 'cancelled').length;
+
+  // Stats
+  $('admin-stats').innerHTML = `
+    <div class="astat"><div class="astat-val">${total}</div><div class="astat-lbl">Orders Today</div></div>
+    <div class="astat"><div class="astat-val">${pending}</div><div class="astat-lbl">Pending</div></div>
+    <div class="astat"><div class="astat-val">${done}</div><div class="astat-lbl">Completed</div></div>
+    <div class="astat"><div class="astat-val">€${orders.reduce((s,o)=>s+o.total,0).toFixed(0)}</div><div class="astat-lbl">Total Revenue</div></div>`;
+
+  // Filter
+  if (adminFilterMode === 'pending') orders = orders.filter(o => o.status === 'pending');
+  if (adminFilterMode === 'done')    orders = orders.filter(o => o.status !== 'pending' && o.status !== 'cancelled');
+
+  if (!orders.length) {
+    $('admin-orders-list').innerHTML = `<p class="admin-empty">${adminFilterMode === 'pending' ? 'No pending orders right now ✓' : 'No orders found for this filter.'}</p>`;
+    return;
+  }
+
+  $('admin-orders-list').innerHTML = orders.map(o => {
+    const isDone = o.status !== 'pending' && o.status !== 'cancelled';
+    const statusMap = { pending:'⏳ Pending', ready_15:'✅ Ready ~15 min', ready_20:'✅ Ready ~20 min', ready_30:'✅ Ready ~30 min', cancelled:'❌ Cancelled' };
+    return `
+    <div class="ao ${isDone ? 'done' : ''}" id="ao-${o.id}">
+      <div class="ao-top">
+        <span class="ao-code">#${o.id}</span>
+        <span class="ao-slot">Pickup: <strong>${slotToFmt(o.slot)}</strong></span>
+        <span class="ao-status ${isDone ? 'st-done' : 'st-pending'}">${statusMap[o.status] || o.status}</span>
+      </div>
+      <div class="ao-customer">👤 ${o.name} · 📞 ${o.phone}</div>
+      <div class="ao-items">🛒 ${o.items.map(i=>`${i.qty}× ${i.name}`).join(', ')}</div>
+      <div class="ao-total">💶 Total: <strong>€${o.total.toFixed(2)}</strong></div>
+      ${o.readyAt ? `<div class="ao-ready">🕐 Estimated ready by: ${o.readyAt}</div>` : ''}
+      ${o.notes   ? `<div class="ao-notes">📝 "${o.notes}"</div>` : ''}
+      ${o.status === 'pending' ? `
+      <div class="ao-btns">
+        <button class="ao-btn ao-btn-15" onclick="setReady('${o.id}',15)">✅ Ready in 15 min</button>
+        <button class="ao-btn ao-btn-20" onclick="setReady('${o.id}',20)">✅ Ready in 20 min</button>
+        <button class="ao-btn ao-btn-30" onclick="setReady('${o.id}',30)">✅ Ready in 30 min</button>
+        <button class="ao-btn ao-btn-cancel" onclick="cancelOrder('${o.id}')">✗ Cancel</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function setReady(id, mins) {
+  const orders = getOrders();
+  const o = orders.find(x => x.id === id);
+  if (!o) return;
+  o.status  = `ready_${mins}`;
+  const rt  = new Date(Date.now() + mins * 60000);
+  o.readyAt = rt.toLocaleTimeString('en-IE', {hour:'2-digit', minute:'2-digit'});
+  saveOrders(orders);
+  loadAdminOrders();
+}
+
+function cancelOrder(id) {
+  if (!confirm(`Cancel order #${id}?`)) return;
+  const orders = getOrders();
+  const o = orders.find(x => x.id === id);
+  if (o) { o.status = 'cancelled'; saveOrders(orders); loadAdminOrders(); }
+}
+
+function startPoll() {
+  adminLastCount = getOrders().filter(o => o.date === todayStr()).length;
+  adminPollTimer = setInterval(() => {
+    const now = getOrders().filter(o => o.date === todayStr()).length;
+    if (now > adminLastCount) {
+      adminLastCount = now;
+      playBeep();
+      const al = $('new-order-alert');
+      al.style.display = 'flex';
+      setTimeout(() => al.style.display = 'none', 5000);
+      loadAdminOrders();
+    }
+  }, 5000);
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [880, 1100, 880].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = f;
+      g.gain.setValueAtTime(.4, ctx.currentTime + i*.16);
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i*.16 + .14);
+      o.start(ctx.currentTime + i*.16);
+      o.stop(ctx.currentTime + i*.16 + .14);
+    });
+  } catch(_) {}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   HOURS / STATUS BADGE
+═══════════════════════════════════════════════════════════ */
+function updateOpenBadge() {
+  const now = new Date(), day = now.getDay();
+  const h   = now.getHours() + now.getMinutes()/60;
+  const wknd = day === 0 || day === 6;
+  const open  = wknd ? 9 : 7.5, close = wknd ? 15 : 15.5;
+  const pill  = $('opill'), dot = $('odot'), txt = $('otxt');
+  // Highlight today
+  const ids = ['hr-0','hr-1','hr-2','hr-3','hr-4','hr-5','hr-6'];
+  document.getElementById(ids[day]).classList.add('today');
+  if (h >= open && h < close) {
+    pill.style.cssText = 'background:rgba(34,139,34,.1);color:#1a7a1a';
+    dot.style.background = '#1a7a1a';
+    txt.textContent = 'Open now';
+  } else {
+    pill.style.cssText = 'background:rgba(180,0,0,.09);color:#a00';
+    dot.style.background = '#a00';
+    txt.textContent = h < open ? `Opens at ${wknd?'9:00am':'7:30am'}` : 'Closed today';
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SCROLL REVEAL + MISC INIT
+═══════════════════════════════════════════════════════════ */
+function mobToggle() { $('mob').classList.toggle('open'); }
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold:.07, rootMargin:'0px 0px -36px 0px' });
+document.querySelectorAll('.rv').forEach(el => io.observe(el));
+
+// URL-based admin access (visit index.html?admin or #admin)
+if (location.search.includes('admin') || location.hash === '#admin') {
+  document.addEventListener('DOMContentLoaded', openAdmin);
+}
+
+/* ── Init ── */
+document.getElementById('hero').classList.add('go');
+renderMenu('all');
+renderCart();
+updateOpenBadge();
+</script>
+</body>
+</html>
