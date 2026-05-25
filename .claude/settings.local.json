@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "PowerShell($content = Get-Content \"d:\\\\MadCoffee\\\\index.html\" -Raw; $lines = \\($content -split \"`n\"\\).Count; Write-Host \"Total lines: $lines\"; \\($content -split \"`n\"\\) | Select-Object -Last 5)"
-    ]
-  }
-}
