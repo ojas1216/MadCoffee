@@ -18,18 +18,18 @@
   <style>
     /* ─── Variables ─────────────────────────────────────── */
     :root {
-      --bg:      #0C0806;
-      --bg2:     #110A05;
-      --bg3:     #1A1209;
+      --bg:      #17100A;
+      --bg2:     #1E1510;
+      --bg3:     #271C12;
       --cream:   #F5EFE6;
-      --cream2:  rgba(245,239,230,.55);
-      --cream3:  rgba(245,239,230,.18);
+      --cream2:  rgba(245,239,230,.65);
+      --cream3:  rgba(245,239,230,.22);
       --gold:    #C9A067;
-      --gold2:   rgba(201,160,103,.4);
-      --gold3:   rgba(201,160,103,.08);
-      --text:    #8E7560;
-      --border:  rgba(201,160,103,.1);
-      --border2: rgba(201,160,103,.2);
+      --gold2:   rgba(201,160,103,.45);
+      --gold3:   rgba(201,160,103,.10);
+      --text:    #9E8570;
+      --border:  rgba(201,160,103,.14);
+      --border2: rgba(201,160,103,.26);
     }
 
     /* ─── Reset ─────────────────────────────────────────── */
@@ -792,136 +792,189 @@
       footer{ padding:36px 14px 24px; }
     }
 
-    /* ─── BOOKING ──────────────────────────────────────────── */
-    #booking { background:var(--bg2); }
+    /* ─── MENU — Add to Order button ──────────────────────── */
+    .menu-card-footer { align-items:center; }
+    .btn-add-order {
+      margin-top:12px; width:100%;
+      padding:10px 16px;
+      background:transparent; border:1px solid var(--border2);
+      color:var(--gold); font-family:'DM Sans',sans-serif;
+      font-size:10px; font-weight:500; letter-spacing:.16em; text-transform:uppercase;
+      cursor:pointer; transition:all .25s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .btn-add-order:hover { background:var(--gold); color:var(--bg); border-color:var(--gold); }
+    .btn-add-order.added { background:var(--gold); color:var(--bg); border-color:var(--gold); }
+    .btn-add-order svg { flex-shrink:0; }
 
-    .book-grid {
-      display:grid; grid-template-columns:1fr 1fr;
-      gap:80px; align-items:start;
+    /* ─── FLOATING CART BUTTON ─────────────────────────────── */
+    #cart-fab {
+      position:fixed; bottom:32px; right:32px; z-index:600;
+      width:56px; height:56px;
+      background:var(--gold); color:var(--bg);
+      border:none; border-radius:50%; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 8px 32px rgba(201,160,103,.35);
+      transition:transform .25s, box-shadow .25s;
+      opacity:0; pointer-events:none;
+      transform:scale(.7);
     }
-    .book-info { position:sticky; top:108px; }
-    .book-info p { color:var(--text); font-size:15px; line-height:1.75; margin-bottom:36px; }
+    #cart-fab.visible { opacity:1; pointer-events:auto; transform:scale(1); }
+    #cart-fab:hover { transform:scale(1.08); box-shadow:0 12px 40px rgba(201,160,103,.5); }
+    #cart-fab-badge {
+      position:absolute; top:-6px; right:-6px;
+      width:20px; height:20px;
+      background:var(--cream); color:var(--bg);
+      border-radius:50%; font-size:11px; font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+    }
 
-    .book-details { display:flex; flex-direction:column; gap:12px; margin-bottom:36px; }
-    .book-detail {
-      display:flex; align-items:flex-start; gap:14px;
-      padding:14px 18px;
-      border:1px solid var(--border); background:var(--gold3);
+    /* ─── CART DRAWER ──────────────────────────────────────── */
+    #cart-overlay {
+      position:fixed; inset:0; background:rgba(12,8,6,.7);
+      backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+      z-index:700; opacity:0; pointer-events:none;
+      transition:opacity .35s;
     }
-    .book-detail-icon { color:var(--gold); font-size:13px; flex-shrink:0; margin-top:2px; }
-    .book-detail-text { display:flex; flex-direction:column; gap:3px; }
-    .book-detail-label { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); }
-    .book-detail-val { font-size:13px; color:var(--cream2); line-height:1.5; }
+    #cart-overlay.open { opacity:1; pointer-events:auto; }
 
-    /* Form card */
-    .book-form-card {
-      background:var(--bg3);
-      border:1px solid var(--border);
-      padding:48px;
+    #cart-drawer {
+      position:fixed; top:0; right:0; bottom:0; z-index:701;
+      width:min(460px,100vw);
+      background:var(--bg2); border-left:1px solid var(--border);
+      display:flex; flex-direction:column;
+      transform:translateX(100%); transition:transform .38s cubic-bezier(.4,0,.2,1);
     }
-    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .form-group { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
-    .form-label {
-      font-size:9px; font-weight:500; letter-spacing:.22em; text-transform:uppercase;
-      color:var(--gold);
+    #cart-drawer.open { transform:translateX(0); }
+
+    .cart-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:24px 28px; border-bottom:1px solid var(--border); flex-shrink:0;
     }
-    .form-input, .form-select, .form-textarea {
+    .cart-header h3 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:22px; font-weight:400; color:var(--cream);
+      display:flex; align-items:center; gap:10px;
+    }
+    .cart-count-badge {
+      font-family:'DM Sans',sans-serif; font-size:11px; font-weight:600;
+      background:var(--gold); color:var(--bg);
+      padding:2px 8px; border-radius:20px;
+    }
+    #cart-close {
+      background:none; border:1px solid var(--border);
+      color:var(--cream2); width:36px; height:36px;
+      cursor:pointer; font-size:18px; transition:all .2s;
+      display:flex; align-items:center; justify-content:center;
+    }
+    #cart-close:hover { border-color:var(--gold2); color:var(--cream); }
+
+    /* Cart items */
+    .cart-body { flex:1; overflow-y:auto; padding:20px 28px; }
+    .cart-empty {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      height:200px; gap:12px; color:var(--text);
+    }
+    .cart-empty svg { opacity:.3; }
+    .cart-empty p { font-size:14px; text-align:center; }
+
+    .cart-item {
+      display:flex; align-items:center; gap:14px;
+      padding:14px 0; border-bottom:1px solid var(--border);
+    }
+    .cart-item:last-child { border-bottom:none; }
+    .cart-item-name { flex:1; font-size:14px; color:var(--cream); }
+    .cart-item-price { font-size:14px; color:var(--gold); min-width:44px; text-align:right; }
+    .qty-ctrl { display:flex; align-items:center; gap:6px; }
+    .qty-btn {
+      width:26px; height:26px;
+      background:var(--bg3); border:1px solid var(--border);
+      color:var(--cream2); font-size:16px; line-height:1; cursor:pointer;
+      transition:all .2s; display:flex; align-items:center; justify-content:center;
+    }
+    .qty-btn:hover { border-color:var(--gold2); color:var(--gold); }
+    .qty-val { font-size:13px; color:var(--cream); min-width:18px; text-align:center; }
+
+    /* Cart footer */
+    .cart-footer { padding:20px 28px; border-top:1px solid var(--border); flex-shrink:0; }
+    .cart-subtotal {
+      display:flex; justify-content:space-between; align-items:baseline;
+      margin-bottom:20px;
+    }
+    .cart-subtotal-label { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--text); }
+    .cart-subtotal-val { font-family:'Cormorant Garamond',serif; font-size:28px; color:var(--gold); }
+
+    /* Order form in cart */
+    .cart-form { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+    .cf-label { font-size:9px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:5px; }
+    .cf-input, .cf-textarea {
       background:var(--bg); border:1px solid var(--border);
       color:var(--cream); font-family:'DM Sans',sans-serif;
-      font-size:14px; padding:13px 16px;
-      outline:none; width:100%;
-      transition:border-color .3s, box-shadow .3s;
-      -webkit-appearance:none; appearance:none;
+      font-size:13px; padding:11px 14px; width:100%; outline:none;
+      transition:border-color .25s;
     }
-    .form-input::placeholder, .form-textarea::placeholder { color:var(--text); opacity:.6; }
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color:var(--gold2);
-      box-shadow:0 0 0 3px rgba(201,160,103,.07);
-    }
-    .form-input.invalid, .form-select.invalid { border-color:rgba(201,112,112,.5); }
-    input[type="date"] { color-scheme:dark; }
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter:invert(.7) sepia(1) saturate(2) hue-rotate(5deg);
-      opacity:.8; cursor:pointer;
-    }
-    .form-select {
-      cursor:pointer;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='6' fill='none'%3E%3Cpath d='M.5.5l5 5 5-5' stroke='%23C9A067' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat:no-repeat; background-position:right 14px center;
-      padding-right:40px;
-    }
-    .form-select option { background:var(--bg2); color:var(--cream); }
-    .form-textarea { resize:vertical; min-height:88px; line-height:1.65; }
-
-    /* Time slots */
-    .time-slots-wrap { margin-bottom:18px; }
-    .time-slots-label { font-size:9px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:10px; }
-    .time-slots-empty { font-size:13px; color:var(--text); padding:14px 16px; text-align:center; border:1px solid var(--border); background:var(--bg); }
-    .time-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
-    .time-slot {
-      padding:10px 4px; font-family:'DM Sans',sans-serif;
-      font-size:12px; font-weight:400; letter-spacing:.05em;
-      color:var(--cream2); background:var(--bg);
-      border:1px solid var(--border); cursor:pointer;
-      text-align:center; transition:all .2s;
-    }
-    .time-slot:hover { border-color:var(--gold2); color:var(--cream); background:rgba(201,160,103,.05); }
-    .time-slot.selected { background:var(--gold); color:var(--bg); border-color:var(--gold); font-weight:500; }
-    .time-slot-req-note { font-size:11px; color:var(--text); margin-top:8px; display:block; }
+    .cf-input::placeholder, .cf-textarea::placeholder { color:var(--text); opacity:.55; }
+    .cf-input:focus, .cf-textarea:focus { border-color:var(--gold2); }
+    .cf-input.invalid { border-color:rgba(201,112,112,.55); }
+    .cf-textarea { resize:none; height:68px; line-height:1.55; }
+    .cf-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 
     /* Submit */
-    .book-submit {
-      width:100%; padding:16px 32px;
+    .cart-submit {
+      width:100%; padding:15px;
       background:var(--gold); color:var(--bg);
       font-family:'DM Sans',sans-serif;
-      font-size:11px; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+      font-size:10px; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
       border:none; cursor:pointer; transition:all .3s;
       display:flex; align-items:center; justify-content:center; gap:10px;
-      margin-top:28px;
     }
-    .book-submit:hover:not(:disabled) { background:var(--cream); transform:translateY(-2px); }
-    .book-submit:disabled { opacity:.55; cursor:not-allowed; transform:none; }
-
-    .submit-spinner {
-      width:15px; height:15px;
-      border:2px solid rgba(12,8,6,.25); border-top-color:var(--bg);
-      border-radius:50%; animation:spin .65s linear infinite; display:none;
-    }
+    .cart-submit:hover:not(:disabled) { background:var(--cream); }
+    .cart-submit:disabled { opacity:.5; cursor:not-allowed; }
     @keyframes spin { to { transform:rotate(360deg); } }
-    .book-submit.loading .submit-text { display:none; }
-    .book-submit.loading .submit-spinner { display:block; }
-
-    /* Status messages */
-    .book-status {
-      margin-top:20px; padding:16px 20px;
-      font-size:14px; line-height:1.65;
-      display:none; border-left:2px solid;
+    .cart-spinner {
+      width:14px; height:14px; border:2px solid rgba(12,8,6,.25);
+      border-top-color:var(--bg); border-radius:50%;
+      animation:spin .65s linear infinite; display:none;
     }
-    .book-status.success { border-color:#6b9e6b; background:rgba(107,158,107,.07); color:#a8d5a8; display:block; }
-    .book-status.error   { border-color:#c97070; background:rgba(201,112,112,.07); color:#e8a8a8; display:block; }
-    .book-status a { color:var(--gold); }
+    .cart-submit.loading .submit-lbl { display:none; }
+    .cart-submit.loading .cart-spinner { display:block; }
 
-    .book-notice { font-size:11px; color:var(--text); margin-top:14px; text-align:center; line-height:1.6; }
+    .cart-status { margin-top:12px; padding:12px 14px; font-size:13px; line-height:1.55; display:none; border-left:2px solid; }
+    .cart-status.success { border-color:#6b9e6b; background:rgba(107,158,107,.07); color:#a8d5a8; display:block; }
+    .cart-status.error   { border-color:#c97070; background:rgba(201,112,112,.07); color:#e8a8a8; display:block; }
+    .cart-status a { color:var(--gold); }
+    .cart-notice { font-size:10px; color:var(--text); text-align:center; margin-top:10px; line-height:1.55; }
 
-    /* Booking responsive */
-    @media(max-width:900px){
-      .book-grid { grid-template-columns:1fr; gap:48px; }
-      .book-info { position:static; }
-      .book-form-card { padding:36px 28px; }
-      .time-grid { grid-template-columns:repeat(3,1fr); }
+    /* ─── HOW TO ORDER ─────────────────────────────────────── */
+    #how-to-order { background:var(--bg2); }
+    .hto-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; margin-top:64px; }
+    .hto-step {
+      padding:36px 28px; border:1px solid var(--border);
+      background:var(--bg3); text-align:center;
+      transition:border-color .3s, transform .3s;
     }
+    .hto-step:hover { border-color:var(--border2); transform:translateY(-4px); }
+    .hto-num {
+      font-family:'Cormorant Garamond',serif; font-size:48px; font-weight:300;
+      color:var(--gold2); line-height:1; margin-bottom:20px;
+    }
+    .hto-icon { font-size:28px; margin-bottom:12px; }
+    .hto-title { font-size:15px; font-weight:500; color:var(--cream); margin-bottom:10px; letter-spacing:.04em; }
+    .hto-desc { font-size:13px; color:var(--text); line-height:1.7; }
+
+    .hto-cta-wrap { text-align:center; margin-top:52px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .hto-note { font-size:12px; color:var(--text); letter-spacing:.06em; }
+
+    @media(max-width:900px){ .hto-grid { grid-template-columns:1fr; gap:16px; margin-top:48px; } }
+    @media(max-width:540px){ .hto-grid { gap:12px; } .hto-step { padding:28px 20px; } }
+
+    /* Cart responsive */
     @media(max-width:540px){
-      .book-form-card { padding:28px 20px; }
-      .form-row { grid-template-columns:1fr; gap:0; }
-      .time-grid { grid-template-columns:repeat(3,1fr); }
-    }
-    @media(max-width:390px){
-      .book-form-card { padding:24px 16px; }
-      .time-grid { grid-template-columns:repeat(2,1fr); gap:6px; }
-    }
-    @media(max-width:320px){
-      .book-form-card { padding:20px 14px; }
-      .time-grid { grid-template-columns:repeat(2,1fr); gap:5px; }
+      #cart-fab { bottom:20px; right:20px; width:50px; height:50px; }
+      .cart-header { padding:20px 20px; }
+      .cart-body { padding:16px 20px; }
+      .cart-footer { padding:16px 20px; }
+      .cf-row { grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -969,12 +1022,12 @@
     <ul class="nav-links">
       <li><a href="#about">Our Story</a></li>
       <li><a href="#menu">Menu</a></li>
+      <li><a href="#how-to-order">Order Online</a></li>
       <li><a href="#reviews">Reviews</a></li>
-      <li><a href="#booking">Book</a></li>
       <li><a href="#location">Find Us</a></li>
       <li><a href="#social">Follow</a></li>
     </ul>
-    <a href="#booking" class="nav-cta">Book a Table</a>
+    <a href="#menu" class="nav-cta" id="nav-order-cta">Order Now</a>
     <button id="burger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
@@ -982,12 +1035,12 @@
 
   <!-- Mobile nav -->
   <div id="mob-nav" role="dialog" aria-modal="true" aria-label="Navigation">
-    <a href="#about"    onclick="closeMob()">Our Story</a>
-    <a href="#menu"     onclick="closeMob()">Menu</a>
-    <a href="#reviews"  onclick="closeMob()">Reviews</a>
-    <a href="#booking"  onclick="closeMob()">Book a Table</a>
-    <a href="#location" onclick="closeMob()">Find Us</a>
-    <a href="#social"   onclick="closeMob()">Follow</a>
+    <a href="#about"         onclick="closeMob()">Our Story</a>
+    <a href="#menu"          onclick="closeMob()">Menu</a>
+    <a href="#how-to-order"  onclick="closeMob()">Order Online</a>
+    <a href="#reviews"       onclick="closeMob()">Reviews</a>
+    <a href="#location"      onclick="closeMob()">Find Us</a>
+    <a href="#social"        onclick="closeMob()">Follow</a>
   </div>
 
   <!-- ─── HERO ─── -->
@@ -1005,8 +1058,8 @@
         </h1>
         <p class="hero-sub">Start Your Day With a Smile.</p>
         <div class="hero-btns">
-          <a href="#booking" class="btn-gold">Book a Table</a>
-          <a href="#menu" class="btn-outline">Explore Menu</a>
+          <a href="#menu" class="btn-gold" id="hero-order-btn">Order Now</a>
+          <a href="#how-to-order" class="btn-outline">How It Works</a>
         </div>
         <div class="hero-trust">
           <span>Single Origin Beans</span>
@@ -1104,7 +1157,8 @@
       <div class="menu-grid">
 
         <!-- Featured: Flat White (wide) -->
-        <div class="menu-card wide rv" data-tilt>
+        <div class="menu-card wide rv" data-tilt
+             data-id="flat-white" data-name="Flat White" data-price="3.50">
           <img class="menu-card-img"
             src="https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=900&h=500&fit=crop&q=80&auto=format"
             alt="Flat White" loading="lazy" />
@@ -1116,11 +1170,16 @@
               <span class="menu-price">€3.50</span>
               <span class="menu-tag">Hot</span>
             </div>
+            <button class="btn-add-order" aria-label="Add Flat White to order">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Add to Order
+            </button>
           </div>
         </div>
 
         <!-- Cappuccino -->
-        <div class="menu-card rv rv-d1" data-tilt>
+        <div class="menu-card rv rv-d1" data-tilt
+             data-id="cappuccino" data-name="Cappuccino" data-price="3.50">
           <img class="menu-card-img"
             src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&h=450&fit=crop&q=80&auto=format"
             alt="Cappuccino" loading="lazy" />
@@ -1132,11 +1191,16 @@
               <span class="menu-price">€3.50</span>
               <span class="menu-tag">Hot</span>
             </div>
+            <button class="btn-add-order" aria-label="Add Cappuccino to order">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Add to Order
+            </button>
           </div>
         </div>
 
         <!-- Latte -->
-        <div class="menu-card rv rv-d2" data-tilt>
+        <div class="menu-card rv rv-d2" data-tilt
+             data-id="cafe-latte" data-name="Café Latte" data-price="3.80">
           <img class="menu-card-img"
             src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&h=450&fit=crop&q=80&auto=format"
             alt="Café Latte" loading="lazy" />
@@ -1148,11 +1212,16 @@
               <span class="menu-price">€3.80</span>
               <span class="menu-tag">Hot</span>
             </div>
+            <button class="btn-add-order" aria-label="Add Café Latte to order">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Add to Order
+            </button>
           </div>
         </div>
 
         <!-- Espresso -->
-        <div class="menu-card rv rv-d1" data-tilt>
+        <div class="menu-card rv rv-d1" data-tilt
+             data-id="espresso" data-name="Espresso" data-price="2.50">
           <img class="menu-card-img"
             src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&h=450&fit=crop&q=80&auto=format"
             alt="Espresso" loading="lazy" />
@@ -1164,11 +1233,16 @@
               <span class="menu-price">€2.50</span>
               <span class="menu-tag">Single / Double</span>
             </div>
+            <button class="btn-add-order" aria-label="Add Espresso to order">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Add to Order
+            </button>
           </div>
         </div>
 
         <!-- Iced Latte -->
-        <div class="menu-card rv rv-d2" data-tilt>
+        <div class="menu-card rv rv-d2" data-tilt
+             data-id="iced-latte" data-name="Iced Latte" data-price="4.20">
           <img class="menu-card-img"
             src="https://images.unsplash.com/photo-1592318951566-25e35eee75e7?w=600&h=450&fit=crop&q=80&auto=format"
             alt="Iced Latte" loading="lazy" />
@@ -1180,11 +1254,16 @@
               <span class="menu-price">€4.20</span>
               <span class="menu-tag">Cold</span>
             </div>
+            <button class="btn-add-order" aria-label="Add Iced Latte to order">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Add to Order
+            </button>
           </div>
         </div>
 
         <!-- Toastie -->
-        <div class="menu-card rv rv-d3" data-tilt>
+        <div class="menu-card rv rv-d3" data-tilt
+             data-id="toastie" data-name="Cheese Toastie" data-price="5.00">
           <img class="menu-card-img"
             src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&h=450&fit=crop&q=80&auto=format"
             alt="Cheese Toastie" loading="lazy" />
@@ -1196,11 +1275,16 @@
               <span class="menu-price">€5.00</span>
               <span class="menu-tag">Ham &amp; Cheese too</span>
             </div>
+            <button class="btn-add-order" aria-label="Add Cheese Toastie to order">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Add to Order
+            </button>
           </div>
         </div>
 
         <!-- Smoothie -->
-        <div class="menu-card rv rv-d4" data-tilt>
+        <div class="menu-card rv rv-d4" data-tilt
+             data-id="smoothie" data-name="Smoothie of the Day" data-price="5.50">
           <img class="menu-card-img"
             src="https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=600&h=450&fit=crop&q=80&auto=format"
             alt="Smoothie" loading="lazy" />
@@ -1212,6 +1296,10 @@
               <span class="menu-price">€5.50</span>
               <span class="menu-tag">Ask Your Barista</span>
             </div>
+            <button class="btn-add-order" aria-label="Add Smoothie to order">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Add to Order
+            </button>
           </div>
         </div>
 
@@ -1357,125 +1445,112 @@
     </div>
   </section>
 
-  <!-- ─── BOOKING ─── -->
-  <section id="booking" aria-label="Book a Table">
+  <!-- ─── HOW TO ORDER ─── -->
+  <section id="how-to-order" aria-label="How to Order">
     <div class="container">
-      <div class="book-grid">
+      <div style="text-align:center;">
+        <span class="eyebrow rv">Pre-Order Online</span>
+        <h2 class="section-title rv rv-d1">Skip the queue,<br><em>collect &amp; enjoy</em></h2>
+        <p class="rv rv-d2" style="color:var(--text);font-size:15px;max-width:480px;margin:16px auto 0;line-height:1.75;">Order ahead from the menu, pay on collection, and walk in to find your order waiting. No waiting, no rushing.</p>
+      </div>
 
-        <!-- Left: info -->
-        <div class="book-info">
-          <span class="eyebrow rv">Reserve a Table</span>
-          <h2 class="section-title rv rv-d1">Book your<br><em>perfect</em> visit</h2>
-          <div class="divider rv rv-d2"></div>
-          <p class="rv rv-d2">Whether it's a morning catch-up, a working lunch, or a treat for yourself — reserve your spot and we'll have everything ready when you arrive.</p>
-
-          <div class="book-details rv rv-d3">
-            <div class="book-detail">
-              <span class="book-detail-icon">◇</span>
-              <div class="book-detail-text">
-                <span class="book-detail-label">Instant Confirmation</span>
-                <span class="book-detail-val">You'll receive an email confirmation straight away</span>
-              </div>
-            </div>
-            <div class="book-detail">
-              <span class="book-detail-icon">◇</span>
-              <div class="book-detail-text">
-                <span class="book-detail-label">Group Size</span>
-                <span class="book-detail-val">Up to 12 guests — larger parties, message us on Instagram</span>
-              </div>
-            </div>
-            <div class="book-detail">
-              <span class="book-detail-icon">◇</span>
-              <div class="book-detail-text">
-                <span class="book-detail-label">Cancellations</span>
-                <span class="book-detail-val">Please give us 2 hours' notice if your plans change</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="rv rv-d4">
-            <p class="loc-label">Opening Hours</p>
-            <div class="hours-grid" style="margin-top:12px;">
-              <div class="hour-row"><span class="day">Monday – Friday</span><span class="time">07:00 – 18:00</span></div>
-              <div class="hour-row"><span class="day">Saturday</span><span class="time">08:00 – 17:00</span></div>
-              <div class="hour-row"><span class="day">Sunday</span><span class="time">09:00 – 16:00</span></div>
-            </div>
-          </div>
+      <div class="hto-grid">
+        <div class="hto-step rv">
+          <div class="hto-num">01</div>
+          <div class="hto-icon">☕</div>
+          <p class="hto-title">Browse &amp; Select</p>
+          <p class="hto-desc">Pick your drinks and food from the menu above. Add as many items as you like — use the cart to review your order anytime.</p>
         </div>
-
-        <!-- Right: form -->
-        <div class="book-form-card rv rv-d2">
-          <form id="booking-form" novalidate>
-            <!-- Honeypot: hidden from real users, bots fill it -->
-            <input type="text" name="website" tabindex="-1" autocomplete="off" style="display:none;position:absolute;left:-9999px" aria-hidden="true" />
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="b-name">Full Name *</label>
-                <input class="form-input" type="text" id="b-name" name="guest_name" placeholder="Your name" required autocomplete="name" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="b-email">Email *</label>
-                <input class="form-input" type="email" id="b-email" name="guest_email" placeholder="you@email.com" required autocomplete="email" />
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="b-phone">Phone Number *</label>
-                <input class="form-input" type="tel" id="b-phone" name="guest_phone" placeholder="+353 ..." required autocomplete="tel" />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="b-guests">Number of Guests *</label>
-                <select class="form-select" id="b-guests" name="guest_count" required>
-                  <option value="">Select guests</option>
-                  <option value="1">1 person</option>
-                  <option value="2">2 people</option>
-                  <option value="3">3 people</option>
-                  <option value="4">4 people</option>
-                  <option value="5">5 people</option>
-                  <option value="6">6 people</option>
-                  <option value="7">7 people</option>
-                  <option value="8">8 people</option>
-                  <option value="9">9 people</option>
-                  <option value="10">10 people</option>
-                  <option value="11">11 people</option>
-                  <option value="12">12 people</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="b-date">Date *</label>
-              <input class="form-input" type="date" id="b-date" name="booking_date" required />
-            </div>
-
-            <div class="time-slots-wrap">
-              <span class="time-slots-label">Preferred Time *</span>
-              <div class="time-slots-empty" id="time-slots-empty">Select a date above to see available time slots</div>
-              <div class="time-grid" id="time-grid" style="display:none" role="group" aria-label="Available time slots"></div>
-              <input type="hidden" id="b-time" name="booking_time" />
-            </div>
-
-            <div class="form-group" style="margin-bottom:0">
-              <label class="form-label" for="b-notes">Special Requests <span style="opacity:.5;font-weight:300">(optional)</span></label>
-              <textarea class="form-textarea" id="b-notes" name="special_notes" placeholder="Dietary needs, occasion, accessibility requirements..."></textarea>
-            </div>
-
-            <button type="submit" class="book-submit" id="book-submit-btn">
-              <span class="submit-text">Reserve My Table</span>
-              <div class="submit-spinner" aria-hidden="true"></div>
-            </button>
-
-            <p class="book-notice">By submitting, you agree to our 2-hour cancellation policy. A confirmation will be sent to your email.</p>
-          </form>
-
-          <div class="book-status" id="book-status" role="alert" aria-live="polite"></div>
+        <div class="hto-step rv rv-d1">
+          <div class="hto-num">02</div>
+          <div class="hto-icon">📋</div>
+          <p class="hto-title">Place Your Order</p>
+          <p class="hto-desc">Enter your name, phone and email. Hit "Place Order" — we'll send you a confirmation immediately and our team gets notified right away.</p>
         </div>
+        <div class="hto-step rv rv-d2">
+          <div class="hto-num">03</div>
+          <div class="hto-icon">🏃</div>
+          <p class="hto-title">Collect &amp; Enjoy</p>
+          <p class="hto-desc">We'll email or call you when your order is ready — usually within 10–20 minutes. Walk in, collect, smile. That's it.</p>
+        </div>
+      </div>
 
+      <div class="hto-cta-wrap rv rv-d3">
+        <button class="btn-gold" id="hto-open-cart" style="border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">View My Order</button>
+        <p class="hto-note">Pay on collection · Cash or card accepted</p>
       </div>
     </div>
   </section>
+
+  <!-- ─── CART DRAWER ─── -->
+  <div id="cart-overlay" aria-hidden="true"></div>
+  <aside id="cart-drawer" role="dialog" aria-modal="true" aria-label="Your Order">
+
+    <div class="cart-header">
+      <h3>
+        Your Order
+        <span class="cart-count-badge" id="cart-badge">0</span>
+      </h3>
+      <button id="cart-close" aria-label="Close order panel">✕</button>
+    </div>
+
+    <div class="cart-body" id="cart-body">
+      <div class="cart-empty" id="cart-empty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <p>Your order is empty.<br>Add items from the menu above.</p>
+      </div>
+      <div id="cart-items"></div>
+    </div>
+
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div class="cart-subtotal">
+        <span class="cart-subtotal-label">Total</span>
+        <span class="cart-subtotal-val" id="cart-total">€0.00</span>
+      </div>
+
+      <form id="order-form" novalidate>
+        <!-- Honeypot -->
+        <input type="text" name="website" tabindex="-1" autocomplete="off" style="display:none;position:absolute;left:-9999px" aria-hidden="true" />
+
+        <div class="cart-form">
+          <div class="cf-row">
+            <div>
+              <label class="cf-label" for="o-name">Name *</label>
+              <input class="cf-input" type="text" id="o-name" placeholder="Your name" required autocomplete="name" />
+            </div>
+            <div>
+              <label class="cf-label" for="o-phone">Phone *</label>
+              <input class="cf-input" type="tel" id="o-phone" placeholder="+353 ..." required autocomplete="tel" />
+            </div>
+          </div>
+          <div>
+            <label class="cf-label" for="o-email">Email *</label>
+            <input class="cf-input" type="email" id="o-email" placeholder="you@email.com" required autocomplete="email" />
+          </div>
+          <div>
+            <label class="cf-label" for="o-notes">Notes <span style="opacity:.45;font-weight:300">(optional)</span></label>
+            <textarea class="cf-textarea" id="o-notes" placeholder="Dietary needs, milk preference, extra shot..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="cart-submit" id="order-submit-btn">
+          <span class="submit-lbl">Place Order</span>
+          <div class="cart-spinner" aria-hidden="true"></div>
+        </button>
+
+        <p class="cart-notice">Pay on collection · We'll contact you when it's ready</p>
+      </form>
+
+      <div class="cart-status" id="cart-status" role="alert" aria-live="polite"></div>
+    </div>
+
+  </aside>
+
+  <!-- Floating cart button -->
+  <button id="cart-fab" aria-label="Open your order" title="View order">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <span id="cart-fab-badge">0</span>
+  </button>
 
   <!-- ─── LOCATION ─── -->
   <section id="location" aria-label="Find Us">
@@ -2000,242 +2075,251 @@
       raf = requestAnimationFrame(tick);
     })();
 
-    /* ─── BOOKING SYSTEM ──────────────────────────────────────────────────────
+    /* ─── ORDER SYSTEM ────────────────────────────────────────────────────────
      *
-     *  Setup instructions (one-time, free):
-     *  1. Go to https://emailjs.com and create a free account
-     *  2. Add an Email Service (connect your Gmail) → copy the Service ID
-     *  3. Create Template 1 "Booking — Owner Alert":
-     *       To email : your-cafe@gmail.com
-     *       Subject  : New Booking — {{guest_name}} · {{booking_date}} {{booking_time}}
-     *       Body     : Name: {{guest_name}}\nEmail: {{guest_email}}\nPhone: {{guest_phone}}
-     *                  \nDate: {{booking_date}}\nTime: {{booking_time}}\nGuests: {{guest_count}}
-     *                  \nNotes: {{special_notes}}
-     *       → copy Template ID into EMAILJS_TPL_OWNER below
-     *  4. Create Template 2 "Booking — Customer Confirm":
-     *       To email : {{guest_email}}
-     *       To name  : {{guest_name}}
-     *       Subject  : Your Mad Coffee booking is confirmed ✓
-     *       Body     : Hi {{guest_name}}, your table is reserved for {{booking_date}} at {{booking_time}}
-     *                  for {{guest_count}}. See you soon! — Mad Coffee team
-     *       → copy Template ID into EMAILJS_TPL_CONFIRM below
-     *  5. Go to Account → API Keys → copy your Public Key
-     *  6. Replace the four YOUR_* placeholders below and deploy
+     *  EmailJS setup (one-time, free — emailjs.com):
+     *  1. Create account → connect Gmail as Email Service → copy Service ID
+     *  2. Template 1 — "Order Alert" (sent to café):
+     *       To email : agentmario1216@gmail.com
+     *       Subject  : 🛎 New Order — {{customer_name}} · {{order_ref}}
+     *       Body     : Name: {{customer_name}}\nPhone: {{customer_phone}}\nEmail: {{customer_email}}
+     *                  \n\nItems:\n{{order_items}}\n\nTotal: {{order_total}}
+     *                  \nNotes: {{order_notes}}
+     *                  \n\n— Reply with ready time —
+     *                  \n10 min: {{reply_10}}
+     *                  \n15 min: {{reply_15}}
+     *                  \n20 min: {{reply_20}}
+     *  3. Template 2 — "Order Confirmation" (sent to customer):
+     *       To email : {{customer_email}}
+     *       Subject  : Your Mad Coffee order is confirmed ☕ ({{order_ref}})
+     *       Body     : Hi {{customer_name}}, we've received your order!
+     *                  \n\n{{order_items}}\nTotal: {{order_total}}
+     *                  \n\nWe'll email or call you on {{customer_phone}} when it's ready.
+     *                  \n— Mad Coffee, Tallaght
+     *  4. Account → API Keys → copy Public Key
+     *  5. Replace the four YOUR_* placeholders below
      *
      * ───────────────────────────────────────────────────────────────────────── */
     (function () {
       'use strict';
 
-      /* ── Config: replace these four values ── */
+      /* ── EmailJS config ── */
       const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
       const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
       const EMAILJS_TPL_OWNER   = 'YOUR_OWNER_TEMPLATE_ID';
       const EMAILJS_TPL_CONFIRM = 'YOUR_CONFIRM_TEMPLATE_ID';
+      const OWNER_EMAIL         = 'agentmario1216@gmail.com';
 
-      /* ── Opening hours per weekday (0 = Sun … 6 = Sat) ── */
-      const HOURS = {
-        0: { open: 9,  close: 16 },
-        1: { open: 7,  close: 18 },
-        2: { open: 7,  close: 18 },
-        3: { open: 7,  close: 18 },
-        4: { open: 7,  close: 18 },
-        5: { open: 7,  close: 18 },
-        6: { open: 8,  close: 17 },
-      };
+      /* ── State ── */
+      let cart = []; /* [{id, name, price, qty}] */
 
-      const dateInput  = document.getElementById('b-date');
-      const timeGrid   = document.getElementById('time-grid');
-      const timeEmpty  = document.getElementById('time-slots-empty');
-      const timeHidden = document.getElementById('b-time');
-      const form       = document.getElementById('booking-form');
-      const submitBtn  = document.getElementById('book-submit-btn');
-      const statusEl   = document.getElementById('book-status');
+      /* ── DOM refs ── */
+      const overlay    = document.getElementById('cart-overlay');
+      const drawer     = document.getElementById('cart-drawer');
+      const cartBody   = document.getElementById('cart-body');
+      const cartItems  = document.getElementById('cart-items');
+      const cartEmpty  = document.getElementById('cart-empty');
+      const cartFooter = document.getElementById('cart-footer');
+      const cartBadge  = document.getElementById('cart-badge');
+      const fabBadge   = document.getElementById('cart-fab-badge');
+      const fab        = document.getElementById('cart-fab');
+      const totalEl    = document.getElementById('cart-total');
+      const form       = document.getElementById('order-form');
+      const submitBtn  = document.getElementById('order-submit-btn');
+      const statusEl   = document.getElementById('cart-status');
 
-      /* ── Date range: today → +90 days ── */
-      const todayDate = new Date();
-      todayDate.setHours(0, 0, 0, 0);
-      const maxDate = new Date(todayDate);
-      maxDate.setDate(maxDate.getDate() + 90);
-      const pad = n => String(n).padStart(2, '0');
-      const toISO = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-      dateInput.min = toISO(todayDate);
-      dateInput.max = toISO(maxDate);
+      /* ── Cart open / close ── */
+      function openCart() {
+        overlay.classList.add('open');
+        drawer.classList.add('open');
+        overlay.removeAttribute('aria-hidden');
+        drawer.setAttribute('aria-modal', 'true');
+        document.body.style.overflow = 'hidden';
+        drawer.querySelector('#cart-close').focus();
+      }
+      function closeCart() {
+        overlay.classList.remove('open');
+        drawer.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
 
-      /* ── Build 30-min time slots for selected date ── */
-      function buildSlots(dateStr) {
-        timeHidden.value = '';
-        timeGrid.innerHTML = '';
-        timeGrid.style.display = 'none';
-        timeEmpty.style.display = 'block';
+      document.getElementById('cart-close').addEventListener('click', closeCart);
+      overlay.addEventListener('click', closeCart);
+      fab.addEventListener('click', openCart);
+      document.getElementById('hto-open-cart').addEventListener('click', openCart);
+      document.getElementById('nav-order-cta').addEventListener('click', e => {
+        if (cart.length) { e.preventDefault(); openCart(); }
+      });
 
-        const d   = new Date(dateStr + 'T00:00:00');
-        const day = d.getDay();
-        const h   = HOURS[day];
-        if (!h) { timeEmpty.textContent = 'Closed on this day'; return; }
+      /* ESC to close */
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
 
-        const now       = new Date();
-        const isToday   = dateStr === toISO(todayDate);
-        const closeMins = h.close * 60;
-        const slots     = [];
+      /* ── Render cart ── */
+      function render() {
+        const count = cart.reduce((s, i) => s + i.qty, 0);
+        const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
 
-        for (let hr = h.open; hr < h.close; hr++) {
-          for (const min of [0, 30]) {
-            const totalMins = hr * 60 + min;
-            if (totalMins > closeMins - 30) continue; /* no slot in last 30 min */
-            if (isToday) {
-              const slotTime = new Date();
-              slotTime.setHours(hr, min, 0, 0);
-              if (slotTime <= now) continue; /* skip past slots today */
-            }
-            slots.push(`${pad(hr)}:${min === 0 ? '00' : '30'}`);
-          }
-        }
+        cartBadge.textContent = count;
+        fabBadge.textContent  = count;
+        totalEl.textContent   = '€' + total.toFixed(2);
 
-        if (slots.length === 0) {
-          timeEmpty.textContent = 'No available times for this date';
-          return;
-        }
+        fab.classList.toggle('visible', count > 0);
+        cartEmpty.style.display   = cart.length ? 'none' : 'flex';
+        cartFooter.style.display  = cart.length ? 'block' : 'none';
+        cartItems.innerHTML       = '';
 
-        timeEmpty.style.display = 'none';
-        timeGrid.style.display  = 'grid';
+        cart.forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'cart-item';
+          row.innerHTML = `
+            <span class="cart-item-name">${item.name}</span>
+            <div class="qty-ctrl">
+              <button class="qty-btn" data-id="${item.id}" data-action="dec" aria-label="Remove one ${item.name}">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" data-id="${item.id}" data-action="inc" aria-label="Add one more ${item.name}">+</button>
+            </div>
+            <span class="cart-item-price">€${(item.price * item.qty).toFixed(2)}</span>`;
+          cartItems.appendChild(row);
+        });
 
-        slots.forEach(slot => {
-          const btn = document.createElement('button');
-          btn.type      = 'button';
-          btn.className = 'time-slot';
-          btn.textContent = slot;
-          btn.setAttribute('aria-pressed', 'false');
+        /* Qty button events */
+        cartItems.querySelectorAll('.qty-btn').forEach(btn => {
           btn.addEventListener('click', () => {
-            timeGrid.querySelectorAll('.time-slot').forEach(b => {
-              b.classList.remove('selected');
-              b.setAttribute('aria-pressed', 'false');
-            });
-            btn.classList.add('selected');
-            btn.setAttribute('aria-pressed', 'true');
-            timeHidden.value = slot;
+            const id  = btn.dataset.id;
+            const act = btn.dataset.action;
+            const idx = cart.findIndex(i => i.id === id);
+            if (idx < 0) return;
+            if (act === 'inc') { cart[idx].qty++; }
+            else { cart[idx].qty--; if (cart[idx].qty <= 0) cart.splice(idx, 1); }
+            render();
           });
-          timeGrid.appendChild(btn);
         });
       }
 
-      dateInput.addEventListener('change', () => {
-        if (dateInput.value) buildSlots(dateInput.value);
+      /* ── Add to order buttons ── */
+      document.querySelectorAll('[data-id][data-name][data-price]').forEach(card => {
+        const btn = card.querySelector('.btn-add-order');
+        if (!btn) return;
+        btn.addEventListener('click', () => {
+          const id    = card.dataset.id;
+          const name  = card.dataset.name;
+          const price = parseFloat(card.dataset.price);
+          const idx   = cart.findIndex(i => i.id === id);
+          if (idx >= 0) { cart[idx].qty++; }
+          else { cart.push({ id, name, price, qty: 1 }); }
+
+          /* Button pulse feedback */
+          btn.classList.add('added');
+          btn.textContent = '✓ Added';
+          setTimeout(() => {
+            btn.classList.remove('added');
+            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg> Add to Order`;
+          }, 1200);
+
+          render();
+          openCart();
+        });
       });
 
-      /* ── Rate limiting: max 3 submissions per hour per browser ── */
+      /* ── Rate limiting ── */
       function canSubmit() {
-        const key  = 'mc_book_ts';
-        const now  = Date.now();
-        let times  = [];
-        try { times = JSON.parse(localStorage.getItem(key) || '[]'); } catch (_) {}
-        times = times.filter(t => now - t < 3_600_000);
-        if (times.length >= 3) return false;
-        times.push(now);
-        localStorage.setItem(key, JSON.stringify(times));
+        const key = 'mc_order_ts';
+        const now = Date.now();
+        let ts = [];
+        try { ts = JSON.parse(localStorage.getItem(key) || '[]'); } catch (_) {}
+        ts = ts.filter(t => now - t < 3_600_000);
+        if (ts.length >= 5) return false;
+        ts.push(now);
+        localStorage.setItem(key, JSON.stringify(ts));
         return true;
       }
 
-      /* ── UI helpers ── */
-      function setInvalid(el, state) {
-        el.classList.toggle('invalid', state);
+      /* ── Unique order ref ── */
+      function orderRef() {
+        return 'MC-' + Date.now().toString(36).toUpperCase().slice(-5);
       }
 
+      /* ── Form submit ── */
       function showStatus(type, html) {
-        statusEl.className = 'book-status ' + type;
+        statusEl.className = 'cart-status ' + type;
         statusEl.innerHTML = html;
         statusEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
-
       function setLoading(on) {
         submitBtn.disabled = on;
         submitBtn.classList.toggle('loading', on);
       }
 
-      /* ── EmailJS init ── */
       try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch (_) {}
 
-      /* ── Form submit ── */
       form.addEventListener('submit', async e => {
         e.preventDefault();
-
-        /* Honeypot check */
         if (form.website && form.website.value) return;
+        if (!cart.length) { showStatus('error', 'Your cart is empty.'); return; }
 
-        const name   = document.getElementById('b-name').value.trim();
-        const email  = document.getElementById('b-email').value.trim();
-        const phone  = document.getElementById('b-phone').value.trim();
-        const guests = document.getElementById('b-guests').value;
-        const date   = dateInput.value;
-        const time   = timeHidden.value;
-        const notes  = document.getElementById('b-notes').value.trim();
+        const name  = document.getElementById('o-name').value.trim();
+        const phone = document.getElementById('o-phone').value.trim();
+        const email = document.getElementById('o-email').value.trim();
+        const notes = document.getElementById('o-notes').value.trim();
 
-        /* Field validation */
-        let hasError = false;
-        [['b-name', !name], ['b-email', !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)],
-         ['b-phone', !phone], ['b-guests', !guests], ['b-date', !date]
-        ].forEach(([id, bad]) => { setInvalid(document.getElementById(id), bad); if (bad) hasError = true; });
-
-        if (!time) {
-          timeEmpty.style.color = '#e8a8a8';
-          hasError = true;
-        } else {
-          timeEmpty.style.color = '';
-        }
-
-        if (hasError) {
-          showStatus('error', 'Please fill in all required fields and select a time slot.');
-          return;
-        }
-
-        if (!canSubmit()) {
-          showStatus('error', 'Too many requests from this device. Please try again later or reach us on <a href="https://www.instagram.com/madcoffee__/" target="_blank" rel="noopener">Instagram</a>.');
-          return;
-        }
+        /* Validate */
+        let err = false;
+        [['o-name',!name],['o-phone',!phone],
+         ['o-email',!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)]
+        ].forEach(([id,bad])=>{ document.getElementById(id).classList.toggle('invalid',bad); if(bad)err=true; });
+        if (err) { showStatus('error','Please fill in your name, phone and a valid email.'); return; }
+        if (!canSubmit()) { showStatus('error','Too many orders from this device. Please call us or message on <a href="https://www.instagram.com/madcoffee__/" target="_blank" rel="noopener">Instagram</a>.'); return; }
 
         setLoading(true);
-        statusEl.className = 'book-status';
+        statusEl.className = 'cart-status';
 
-        const friendlyDate = new Date(date + 'T00:00:00').toLocaleDateString('en-IE', {
-          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
+        const ref        = orderRef();
+        const total      = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const itemLines  = cart.map(i => `${i.qty}× ${i.name} — €${(i.price*i.qty).toFixed(2)}`).join('\n');
+
+        /* Ready-time mailto links the barista can click in their inbox */
+        const replyBase = `mailto:${email}?subject=Your Mad Coffee order is ready! (${ref})&body=Hi ${encodeURIComponent(name)}, your order will be ready in `;
+        const reply10 = replyBase + '10%20minutes.%20See%20you%20soon!%20%E2%80%94%20Mad%20Coffee';
+        const reply15 = replyBase + '15%20minutes.%20See%20you%20soon!%20%E2%80%94%20Mad%20Coffee';
+        const reply20 = replyBase + '20%20minutes.%20See%20you%20soon!%20%E2%80%94%20Mad%20Coffee';
 
         const params = {
-          guest_name:    name,
-          guest_email:   email,
-          guest_phone:   phone,
-          guest_count:   guests,
-          booking_date:  friendlyDate,
-          booking_time:  time,
-          special_notes: notes || 'None',
+          order_ref:       ref,
+          customer_name:   name,
+          customer_phone:  phone,
+          customer_email:  email,
+          order_items:     itemLines,
+          order_total:     '€' + total.toFixed(2),
+          order_notes:     notes || 'None',
+          reply_10:        reply10,
+          reply_15:        reply15,
+          reply_20:        reply20,
+          to_email:        email,
+          to_name:         name,
         };
 
         try {
-          /* Only send if credentials are configured */
           if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
-            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_OWNER,   { ...params, to_email: 'agentmario1216@gmail.com' });
-            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_CONFIRM, { ...params, to_email: email, to_name: name });
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_OWNER,   { ...params, to_email: OWNER_EMAIL });
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_CONFIRM, params);
           } else {
-            /* Dev/demo mode: simulate a 600ms delay */
-            await new Promise(r => setTimeout(r, 600));
+            await new Promise(r => setTimeout(r, 700)); /* demo mode */
           }
 
           showStatus('success',
-            `<strong>Booking confirmed!</strong><br>` +
-            `Thank you, ${name}. A confirmation has been sent to <strong>${email}</strong>.<br>` +
-            `We look forward to seeing you on <strong>${friendlyDate}</strong> at <strong>${time}</strong>.`
+            `<strong>Order placed! (${ref})</strong><br>` +
+            `Thanks, ${name}! We've emailed your confirmation to <strong>${email}</strong>.<br>` +
+            `We'll contact you on <strong>${phone}</strong> when your order is ready.`
           );
+          cart = [];
+          render();
           form.reset();
-          timeGrid.innerHTML = '';
-          timeGrid.style.display  = 'none';
-          timeEmpty.textContent   = 'Select a date above to see available time slots';
-          timeEmpty.style.display = 'block';
-          timeEmpty.style.color   = '';
-          timeHidden.value        = '';
 
         } catch (err) {
           console.error('EmailJS error:', err);
           showStatus('error',
-            `Something went wrong sending your booking. Please try again, or reach us directly on ` +
+            `Something went wrong. Please try again or reach us on ` +
             `<a href="https://www.instagram.com/madcoffee__/" target="_blank" rel="noopener">Instagram</a>.`
           );
         } finally {
@@ -2243,12 +2327,15 @@
         }
       });
 
-      /* Clear invalid state on input */
-      ['b-name','b-email','b-phone','b-guests','b-date'].forEach(id => {
+      /* Clear invalid on input */
+      ['o-name','o-phone','o-email'].forEach(id => {
         document.getElementById(id).addEventListener('input', function () {
           this.classList.remove('invalid');
         });
       });
+
+      /* Initial render */
+      render();
     })();
   </script>
 </body>
