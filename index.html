@@ -13,8 +13,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
   <style>
     /* ─── Variables ─────────────────────────────────────── */
     :root {
@@ -915,9 +913,7 @@
     }
     .cf-input::placeholder, .cf-textarea::placeholder { color:var(--text); opacity:.55; }
     .cf-input:focus, .cf-textarea:focus { border-color:var(--gold2); }
-    .cf-input.invalid { border-color:rgba(201,112,112,.55); }
-    .cf-textarea { resize:none; height:68px; line-height:1.55; }
-    .cf-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .cf-textarea { resize:none; height:72px; line-height:1.55; }
 
     /* Submit */
     .cart-submit {
@@ -928,16 +924,7 @@
       border:none; cursor:pointer; transition:all .3s;
       display:flex; align-items:center; justify-content:center; gap:10px;
     }
-    .cart-submit:hover:not(:disabled) { background:var(--cream); }
-    .cart-submit:disabled { opacity:.5; cursor:not-allowed; }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    .cart-spinner {
-      width:14px; height:14px; border:2px solid rgba(12,8,6,.25);
-      border-top-color:var(--bg); border-radius:50%;
-      animation:spin .65s linear infinite; display:none;
-    }
-    .cart-submit.loading .submit-lbl { display:none; }
-    .cart-submit.loading .cart-spinner { display:block; }
+    .cart-submit:hover { background:var(--cream); }
 
     .cart-status { margin-top:12px; padding:12px 14px; font-size:13px; line-height:1.55; display:none; border-left:2px solid; }
     .cart-status.success { border-color:#6b9e6b; background:rgba(107,158,107,.07); color:#a8d5a8; display:block; }
@@ -1463,15 +1450,15 @@
         </div>
         <div class="hto-step rv rv-d1">
           <div class="hto-num">02</div>
-          <div class="hto-icon">📋</div>
-          <p class="hto-title">Place Your Order</p>
-          <p class="hto-desc">Enter your name, phone and email. Hit "Place Order" — we'll send you a confirmation immediately and our team gets notified right away.</p>
+          <div class="hto-icon">💬</div>
+          <p class="hto-title">Send via WhatsApp</p>
+          <p class="hto-desc">Tap "Send Order on WhatsApp" — your order is pre-filled as a message. Just hit Send. Our team gets it instantly.</p>
         </div>
         <div class="hto-step rv rv-d2">
           <div class="hto-num">03</div>
           <div class="hto-icon">🏃</div>
           <p class="hto-title">Collect &amp; Enjoy</p>
-          <p class="hto-desc">We'll email or call you when your order is ready — usually within 10–20 minutes. Walk in, collect, smile. That's it.</p>
+          <p class="hto-desc">We'll WhatsApp you back with your ready time — usually 10–20 minutes. Walk in, grab your order, and you're good to go.</p>
         </div>
       </div>
 
@@ -1509,36 +1496,23 @@
       </div>
 
       <form id="order-form" novalidate>
-        <!-- Honeypot -->
-        <input type="text" name="website" tabindex="-1" autocomplete="off" style="display:none;position:absolute;left:-9999px" aria-hidden="true" />
-
         <div class="cart-form">
-          <div class="cf-row">
-            <div>
-              <label class="cf-label" for="o-name">Name *</label>
-              <input class="cf-input" type="text" id="o-name" placeholder="Your name" required autocomplete="name" />
-            </div>
-            <div>
-              <label class="cf-label" for="o-phone">Phone *</label>
-              <input class="cf-input" type="tel" id="o-phone" placeholder="+353 ..." required autocomplete="tel" />
-            </div>
-          </div>
           <div>
-            <label class="cf-label" for="o-email">Email *</label>
-            <input class="cf-input" type="email" id="o-email" placeholder="you@email.com" required autocomplete="email" />
+            <label class="cf-label" for="o-name">Your Name <span style="opacity:.45;font-weight:300">(optional)</span></label>
+            <input class="cf-input" type="text" id="o-name" placeholder="So we know who to call" autocomplete="name" />
           </div>
           <div>
             <label class="cf-label" for="o-notes">Notes <span style="opacity:.45;font-weight:300">(optional)</span></label>
-            <textarea class="cf-textarea" id="o-notes" placeholder="Dietary needs, milk preference, extra shot..."></textarea>
+            <textarea class="cf-textarea" id="o-notes" placeholder="Oat milk, extra shot, no sugar..."></textarea>
           </div>
         </div>
 
         <button type="submit" class="cart-submit" id="order-submit-btn">
-          <span class="submit-lbl">Place Order</span>
-          <div class="cart-spinner" aria-hidden="true"></div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span class="submit-lbl">Send Order on WhatsApp</span>
         </button>
 
-        <p class="cart-notice">Pay on collection · We'll contact you when it's ready</p>
+        <p class="cart-notice">Opens WhatsApp · Pay on collection · We'll reply with your ready time</p>
       </form>
 
       <div class="cart-status" id="cart-status" role="alert" aria-live="polite"></div>
@@ -2075,40 +2049,16 @@
       raf = requestAnimationFrame(tick);
     })();
 
-    /* ─── ORDER SYSTEM ────────────────────────────────────────────────────────
-     *
-     *  EmailJS setup (one-time, free — emailjs.com):
-     *  1. Create account → connect Gmail as Email Service → copy Service ID
-     *  2. Template 1 — "Order Alert" (sent to café):
-     *       To email : agentmario1216@gmail.com
-     *       Subject  : 🛎 New Order — {{customer_name}} · {{order_ref}}
-     *       Body     : Name: {{customer_name}}\nPhone: {{customer_phone}}\nEmail: {{customer_email}}
-     *                  \n\nItems:\n{{order_items}}\n\nTotal: {{order_total}}
-     *                  \nNotes: {{order_notes}}
-     *                  \n\n— Reply with ready time —
-     *                  \n10 min: {{reply_10}}
-     *                  \n15 min: {{reply_15}}
-     *                  \n20 min: {{reply_20}}
-     *  3. Template 2 — "Order Confirmation" (sent to customer):
-     *       To email : {{customer_email}}
-     *       Subject  : Your Mad Coffee order is confirmed ☕ ({{order_ref}})
-     *       Body     : Hi {{customer_name}}, we've received your order!
-     *                  \n\n{{order_items}}\nTotal: {{order_total}}
-     *                  \n\nWe'll email or call you on {{customer_phone}} when it's ready.
-     *                  \n— Mad Coffee, Tallaght
-     *  4. Account → API Keys → copy Public Key
-     *  5. Replace the four YOUR_* placeholders below
-     *
+    /* ─── ORDER SYSTEM — WhatsApp ─────────────────────────────────────────────
+     *  One thing to change: set WHATSAPP_NUMBER to the café's WhatsApp number
+     *  in international format — no +, no spaces, no dashes.
+     *  Example (Irish): 353861234567  (353 + number without leading 0)
      * ───────────────────────────────────────────────────────────────────────── */
     (function () {
       'use strict';
 
-      /* ── EmailJS config ── */
-      const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
-      const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
-      const EMAILJS_TPL_OWNER   = 'YOUR_OWNER_TEMPLATE_ID';
-      const EMAILJS_TPL_CONFIRM = 'YOUR_CONFIRM_TEMPLATE_ID';
-      const OWNER_EMAIL         = 'agentmario1216@gmail.com';
+      /* ── CHANGE THIS to the café's WhatsApp number ── */
+      const WHATSAPP_NUMBER = '353XXXXXXXXX';
 
       /* ── State ── */
       let cart = []; /* [{id, name, price, qty}] */
@@ -2116,7 +2066,6 @@
       /* ── DOM refs ── */
       const overlay    = document.getElementById('cart-overlay');
       const drawer     = document.getElementById('cart-drawer');
-      const cartBody   = document.getElementById('cart-body');
       const cartItems  = document.getElementById('cart-items');
       const cartEmpty  = document.getElementById('cart-empty');
       const cartFooter = document.getElementById('cart-footer');
@@ -2133,9 +2082,8 @@
         overlay.classList.add('open');
         drawer.classList.add('open');
         overlay.removeAttribute('aria-hidden');
-        drawer.setAttribute('aria-modal', 'true');
         document.body.style.overflow = 'hidden';
-        drawer.querySelector('#cart-close').focus();
+        document.getElementById('cart-close').focus();
       }
       function closeCart() {
         overlay.classList.remove('open');
@@ -2151,8 +2099,6 @@
       document.getElementById('nav-order-cta').addEventListener('click', e => {
         if (cart.length) { e.preventDefault(); openCart(); }
       });
-
-      /* ESC to close */
       document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
 
       /* ── Render cart ── */
@@ -2165,33 +2111,30 @@
         totalEl.textContent   = '€' + total.toFixed(2);
 
         fab.classList.toggle('visible', count > 0);
-        cartEmpty.style.display   = cart.length ? 'none' : 'flex';
-        cartFooter.style.display  = cart.length ? 'block' : 'none';
-        cartItems.innerHTML       = '';
+        cartEmpty.style.display  = cart.length ? 'none' : 'flex';
+        cartFooter.style.display = cart.length ? 'block' : 'none';
+        cartItems.innerHTML      = '';
 
         cart.forEach(item => {
           const row = document.createElement('div');
           row.className = 'cart-item';
-          row.innerHTML = `
-            <span class="cart-item-name">${item.name}</span>
-            <div class="qty-ctrl">
-              <button class="qty-btn" data-id="${item.id}" data-action="dec" aria-label="Remove one ${item.name}">−</button>
-              <span class="qty-val">${item.qty}</span>
-              <button class="qty-btn" data-id="${item.id}" data-action="inc" aria-label="Add one more ${item.name}">+</button>
-            </div>
-            <span class="cart-item-price">€${(item.price * item.qty).toFixed(2)}</span>`;
+          row.innerHTML =
+            `<span class="cart-item-name">${item.name}</span>` +
+            `<div class="qty-ctrl">` +
+              `<button class="qty-btn" data-id="${item.id}" data-action="dec" aria-label="Remove one ${item.name}">−</button>` +
+              `<span class="qty-val">${item.qty}</span>` +
+              `<button class="qty-btn" data-id="${item.id}" data-action="inc" aria-label="Add one more ${item.name}">+</button>` +
+            `</div>` +
+            `<span class="cart-item-price">€${(item.price * item.qty).toFixed(2)}</span>`;
           cartItems.appendChild(row);
         });
 
-        /* Qty button events */
         cartItems.querySelectorAll('.qty-btn').forEach(btn => {
           btn.addEventListener('click', () => {
-            const id  = btn.dataset.id;
-            const act = btn.dataset.action;
-            const idx = cart.findIndex(i => i.id === id);
+            const idx = cart.findIndex(i => i.id === btn.dataset.id);
             if (idx < 0) return;
-            if (act === 'inc') { cart[idx].qty++; }
-            else { cart[idx].qty--; if (cart[idx].qty <= 0) cart.splice(idx, 1); }
+            btn.dataset.action === 'inc' ? cart[idx].qty++ : cart[idx].qty--;
+            if (cart[idx].qty <= 0) cart.splice(idx, 1);
             render();
           });
         });
@@ -2202,19 +2145,20 @@
         const btn = card.querySelector('.btn-add-order');
         if (!btn) return;
         btn.addEventListener('click', () => {
-          const id    = card.dataset.id;
-          const name  = card.dataset.name;
-          const price = parseFloat(card.dataset.price);
-          const idx   = cart.findIndex(i => i.id === id);
-          if (idx >= 0) { cart[idx].qty++; }
-          else { cart.push({ id, name, price, qty: 1 }); }
+          const { id, name, price } = card.dataset;
+          const idx = cart.findIndex(i => i.id === id);
+          idx >= 0 ? cart[idx].qty++ : cart.push({ id, name, price: parseFloat(price), qty: 1 });
 
-          /* Button pulse feedback */
           btn.classList.add('added');
           btn.textContent = '✓ Added';
           setTimeout(() => {
             btn.classList.remove('added');
-            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg> Add to Order`;
+            btn.innerHTML =
+              `<svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">` +
+              `<circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/>` +
+              `<line x1="6.5" y1="3.5" x2="6.5" y2="9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>` +
+              `<line x1="3.5" y1="6.5" x2="9.5" y2="6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>` +
+              `</svg> Add to Order`;
           }, 1200);
 
           render();
@@ -2222,116 +2166,55 @@
         });
       });
 
-      /* ── Rate limiting ── */
-      function canSubmit() {
-        const key = 'mc_order_ts';
-        const now = Date.now();
-        let ts = [];
-        try { ts = JSON.parse(localStorage.getItem(key) || '[]'); } catch (_) {}
-        ts = ts.filter(t => now - t < 3_600_000);
-        if (ts.length >= 5) return false;
-        ts.push(now);
-        localStorage.setItem(key, JSON.stringify(ts));
-        return true;
-      }
+      /* ── Build WhatsApp message & open ── */
+      function sendViaWhatsApp(name, notes) {
+        const total     = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        const itemLines = cart.map(i => `  • ${i.qty}× ${i.name} — €${(i.price * i.qty).toFixed(2)}`).join('\n');
 
-      /* ── Unique order ref ── */
-      function orderRef() {
-        return 'MC-' + Date.now().toString(36).toUpperCase().slice(-5);
+        const msg = [
+          '☕ *Mad Coffee — New Order*',
+          '',
+          name ? `*Name:* ${name}` : '',
+          '',
+          '*Items:*',
+          itemLines,
+          '',
+          `*Total: €${total.toFixed(2)}*`,
+          notes ? `\n*Notes:* ${notes}` : '',
+          '',
+          '_Sent from madcoffee.ie_',
+        ].filter(l => l !== undefined).join('\n').trim();
+
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
       }
 
       /* ── Form submit ── */
-      function showStatus(type, html) {
-        statusEl.className = 'cart-status ' + type;
-        statusEl.innerHTML = html;
-        statusEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-      function setLoading(on) {
-        submitBtn.disabled = on;
-        submitBtn.classList.toggle('loading', on);
-      }
-
-      try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch (_) {}
-
-      form.addEventListener('submit', async e => {
+      form.addEventListener('submit', e => {
         e.preventDefault();
-        if (form.website && form.website.value) return;
-        if (!cart.length) { showStatus('error', 'Your cart is empty.'); return; }
+        if (!cart.length) {
+          statusEl.className = 'cart-status error';
+          statusEl.innerHTML = 'Your cart is empty — add items from the menu first.';
+          statusEl.style.display = 'block';
+          return;
+        }
 
         const name  = document.getElementById('o-name').value.trim();
-        const phone = document.getElementById('o-phone').value.trim();
-        const email = document.getElementById('o-email').value.trim();
         const notes = document.getElementById('o-notes').value.trim();
 
-        /* Validate */
-        let err = false;
-        [['o-name',!name],['o-phone',!phone],
-         ['o-email',!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)]
-        ].forEach(([id,bad])=>{ document.getElementById(id).classList.toggle('invalid',bad); if(bad)err=true; });
-        if (err) { showStatus('error','Please fill in your name, phone and a valid email.'); return; }
-        if (!canSubmit()) { showStatus('error','Too many orders from this device. Please call us or message on <a href="https://www.instagram.com/madcoffee__/" target="_blank" rel="noopener">Instagram</a>.'); return; }
+        sendViaWhatsApp(name, notes);
 
-        setLoading(true);
-        statusEl.className = 'cart-status';
+        /* Show success in the cart after WhatsApp opens */
+        statusEl.className = 'cart-status success';
+        statusEl.innerHTML =
+          `<strong>WhatsApp opened!</strong><br>` +
+          `Hit <em>Send</em> in WhatsApp and we'll reply with your ready time.<br>` +
+          `Pay on collection — cash or card.`;
+        statusEl.style.display = 'block';
 
-        const ref        = orderRef();
-        const total      = cart.reduce((s, i) => s + i.price * i.qty, 0);
-        const itemLines  = cart.map(i => `${i.qty}× ${i.name} — €${(i.price*i.qty).toFixed(2)}`).join('\n');
-
-        /* Ready-time mailto links the barista can click in their inbox */
-        const replyBase = `mailto:${email}?subject=Your Mad Coffee order is ready! (${ref})&body=Hi ${encodeURIComponent(name)}, your order will be ready in `;
-        const reply10 = replyBase + '10%20minutes.%20See%20you%20soon!%20%E2%80%94%20Mad%20Coffee';
-        const reply15 = replyBase + '15%20minutes.%20See%20you%20soon!%20%E2%80%94%20Mad%20Coffee';
-        const reply20 = replyBase + '20%20minutes.%20See%20you%20soon!%20%E2%80%94%20Mad%20Coffee';
-
-        const params = {
-          order_ref:       ref,
-          customer_name:   name,
-          customer_phone:  phone,
-          customer_email:  email,
-          order_items:     itemLines,
-          order_total:     '€' + total.toFixed(2),
-          order_notes:     notes || 'None',
-          reply_10:        reply10,
-          reply_15:        reply15,
-          reply_20:        reply20,
-          to_email:        email,
-          to_name:         name,
-        };
-
-        try {
-          if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY') {
-            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_OWNER,   { ...params, to_email: OWNER_EMAIL });
-            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_CONFIRM, params);
-          } else {
-            await new Promise(r => setTimeout(r, 700)); /* demo mode */
-          }
-
-          showStatus('success',
-            `<strong>Order placed! (${ref})</strong><br>` +
-            `Thanks, ${name}! We've emailed your confirmation to <strong>${email}</strong>.<br>` +
-            `We'll contact you on <strong>${phone}</strong> when your order is ready.`
-          );
-          cart = [];
-          render();
-          form.reset();
-
-        } catch (err) {
-          console.error('EmailJS error:', err);
-          showStatus('error',
-            `Something went wrong. Please try again or reach us on ` +
-            `<a href="https://www.instagram.com/madcoffee__/" target="_blank" rel="noopener">Instagram</a>.`
-          );
-        } finally {
-          setLoading(false);
-        }
-      });
-
-      /* Clear invalid on input */
-      ['o-name','o-phone','o-email'].forEach(id => {
-        document.getElementById(id).addEventListener('input', function () {
-          this.classList.remove('invalid');
-        });
+        cart = [];
+        render();
+        form.reset();
       });
 
       /* Initial render */
